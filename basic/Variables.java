@@ -1,6 +1,6 @@
 public class Variables {
-    public static void main(String[] args){
-        int myNumber = 865;
+    public static void main(String[] args) {
+        // int myNumber = 865;
         int yourNumber;
         yourNumber = 45;
         boolean isVegetarian = true;

@@ -1,5 +1,3 @@
-import java.text.ListFormat.Style;
-
 public class operators {
     public static void main(String[] args) {
         int a = 10, b = 5;
@@ -24,7 +22,7 @@ public class operators {
         System.out.println(x);
 
         // Logical operators
-        System.out.println(2 > 3 && 2 > 5);
+        System.out.println(2 > 1 && 2 > 5);
 
         // Ternary operators
         int number = 10;
