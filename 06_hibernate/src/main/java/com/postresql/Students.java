@@ -14,6 +14,7 @@ public class Students {
     private String studentName;
     @Column(name = "marks")
     private int studentMarks;
+    private Laptop laptop;
 
     public int getRollNo() {
         return rollNo;
@@ -39,12 +40,21 @@ public class Students {
         this.studentMarks = studentMarks;
     }
 
+    public Laptop getLaptop() {
+        return laptop;
+    }
+
+    public void setLaptop(Laptop laptop) {
+        this.laptop = laptop;
+    }
+
     @Override
     public String toString() {
         return "Students{" +
                 "rollNo=" + rollNo +
                 ", studentName='" + studentName + '\'' +
                 ", studentMarks=" + studentMarks +
+                ", laptop=" + laptop +
                 '}';
     }
 }
