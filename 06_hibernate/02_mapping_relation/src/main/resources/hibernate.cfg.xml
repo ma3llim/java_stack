@@ -2,7 +2,7 @@
     <session-factory>
         <!-- Database connection -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/demo</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/demo2</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">0000</property>
 
