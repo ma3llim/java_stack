@@ -1,4 +1,4 @@
-package org.onetomany;
+package org.EagerAndLazyFetch;
 
 import jakarta.persistence.*;
 

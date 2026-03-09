@@ -1,4 +1,4 @@
-package org.onetomany;
+package org.EagerAndLazyFetch;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,7 +29,7 @@ public class Main {
                 .buildSessionFactory();
 
         try (Session session = sessionFactory.openSession()) {
-
+            System.out.println("Session First");
             Transaction transaction = session.beginTransaction();
 
             session.persist(s1);   // cascade will save laptops
@@ -39,6 +39,18 @@ public class Main {
             Students student = session.get(Students.class, 1);
             System.out.println(student);
         }
+
+        // ---------- SESSION 2 (FETCH DATA) ----------
+        try (Session session = sessionFactory.openSession()) {
+            System.out.println("Sesssion Second");
+            Students student = session.get(Students.class, 1);
+
+            System.out.println("Student Name: " + student.getStudentName());
+
+            // Fetch laptops
+            System.out.println("Laptops: " + student.getLaptop());
+        }
+
 
         sessionFactory.close();
     }
