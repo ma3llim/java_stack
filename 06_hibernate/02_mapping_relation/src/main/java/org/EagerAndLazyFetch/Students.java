@@ -1,4 +1,4 @@
-package org.manytomany;
+package org.onetomany;
 
 import jakarta.persistence.*;
 
@@ -8,7 +8,6 @@ import java.util.List;
 public class Students {
 
     @Id
-    @GeneratedValue
     @Column(name = "id")
     private int rollNo;
 
@@ -18,16 +17,17 @@ public class Students {
     @Column(name = "marks")
     private int studentMarks;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Laptop> laptops;
+    @OneToMany(mappedBy = "students", cascade = CascadeType.ALL)
+    private List<Laptop> laptop;
 
     public Students() {
     }
 
-    public Students(String studentName, int studentMarks, List<Laptop> laptops) {
+    public Students(int rollNo, String studentName, int studentMarks, List<Laptop> laptop) {
+        this.rollNo = rollNo;
         this.studentName = studentName;
         this.studentMarks = studentMarks;
-        this.laptops = laptops;
+        this.laptop = laptop;
     }
 
     public int getRollNo() {
@@ -54,12 +54,12 @@ public class Students {
         this.studentMarks = studentMarks;
     }
 
-    public List<Laptop> getLaptops() {
-        return laptops;
+    public List<Laptop> getLaptop() {
+        return laptop;
     }
 
-    public void setLaptops(List<Laptop> laptops) {
-        this.laptops = laptops;
+    public void setLaptop(List<Laptop> laptop) {
+        this.laptop = laptop;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class Students {
                 "rollNo=" + rollNo +
                 ", studentName='" + studentName + '\'' +
                 ", studentMarks=" + studentMarks +
-                ", laptops=" + laptops +
+                ", laptop=" + laptop +
                 '}';
     }
 }
