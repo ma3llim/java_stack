@@ -6,6 +6,7 @@
 
     <bean id="student" class="org.example.Student">
         <property name="name" value="Mohd Sameer"></property>
+        <property name="lap" ref="laptop"></property>
     </bean>
     <bean id="laptop" class="org.example.Laptop">
     </bean>
