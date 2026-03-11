@@ -8,7 +8,6 @@ public class Main {
         ApplicationContext context =new ClassPathXmlApplicationContext("spring.xml");
         Student obj = (Student) context.getBean("student");
         Laptop obj2 = (Laptop) context.getBean("laptop");
-//        obj.code();
-//        obj2.device();
+        System.out.println(obj.getName());
     }
 }

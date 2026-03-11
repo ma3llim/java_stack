@@ -4,8 +4,8 @@
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="student" class="org.example.Student" scope="prototype">
-
+    <bean id="student" class="org.example.Student">
+        <property name="name" value="Mohd Sameer"></property>
     </bean>
     <bean id="laptop" class="org.example.Laptop">
     </bean>
