@@ -5,8 +5,17 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="student" class="org.example.Student">
-        <property name="name" value="Mohd Sameer"></property>
-        <property name="lap" ref="laptop"></property>
+        <!-- With Values and ref -->
+        <!--<constructor-arg ref="laptop"/>-->
+        <!--<constructor-arg value="Mohd Sameer From Constructor"/>-->
+
+        <!-- With Index -->
+        <!--<constructor-arg index="0" ref="laptop"/>-->
+        <!--<constructor-arg index="1" value="Mohd Sameer From Constructor"/>-->
+
+        <!--Name-->
+        <constructor-arg name="lap" ref="laptop"/>
+        <constructor-arg name="name" value="Mohd Sameer From Constructor"/>
     </bean>
     <bean id="laptop" class="org.example.Laptop">
     </bean>
