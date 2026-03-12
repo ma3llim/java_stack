@@ -4,15 +4,15 @@ import java.beans.ConstructorProperties;
 
 public class Student {
     private String name;
-    private Laptop lap;
+    private Computer com;
 
     public Student(){
         System.out.println("Object Created For Student");
     }
     @ConstructorProperties({"name", "lap"})
-    public Student(String name, Laptop lap) {
+    public Student(String name, Laptop com) {
         this.name = name;
-        this.lap = lap;
+        this.com = com;
     }
 
     public String getName() {
@@ -23,16 +23,16 @@ public class Student {
         this.name = name;
     }
 
-    public Laptop getLap() {
-        return lap;
+    public Computer getCom() {
+        return com;
     }
 
-    public void setLap(Laptop lap) {
-        this.lap = lap;
+    public void setCom(Computer com) {
+        this.com = com;
     }
 
     public void code(){
-        lap.device();
+        com.device();
         System.out.println("Code");
     }
 }
