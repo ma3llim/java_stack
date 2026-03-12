@@ -4,7 +4,7 @@
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="student" class="org.example.Student" autowire="byName">
+    <bean id="student" class="org.example.Student" autowire="byType">
 
         <property name="name" value="Mohd Sameer"/>
         <!--<property name="com" ref="laptop" />-->
@@ -20,6 +20,8 @@
         <!--<constructor-arg name="lap" ref="laptop"/>-->
         <!--<constructor-arg name="name" value="Mohd Sameer From Constructor"/>-->
     </bean>
-    <bean id="com" class="org.example.Laptop">
+    <bean id="com1" class="org.example.Laptop" primary="true">
+    </bean>
+    <bean id="com2" class="org.example.Desktop">
     </bean>
 </beans>
