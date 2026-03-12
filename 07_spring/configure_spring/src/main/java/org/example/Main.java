@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args){
         ApplicationContext context =new ClassPathXmlApplicationContext("spring.xml");
         Student obj = (Student) context.getBean("student");
-        Laptop obj2 = (Laptop) context.getBean("laptop");
-        System.out.println(obj.getName());
+        // Laptop obj2 = (Laptop) context.getBean("laptop");
+        obj.code();
     }
 }
