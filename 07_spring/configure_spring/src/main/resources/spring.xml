@@ -7,7 +7,10 @@
     <bean id="student" class="org.example.Student" autowire="byType">
 
         <property name="name" value="Mohd Sameer"/>
-        <!--<property name="com" ref="laptop" />-->
+        <property name="com">
+            <bean id="com1" class="org.example.Laptop" primary="true" lazy-init="true">
+            </bean>
+        </property>
         <!-- With Values and ref -->
         <!--<constructor-arg ref="laptop"/>-->
         <!--<constructor-arg value="Mohd Sameer From Constructor"/>-->
@@ -20,8 +23,8 @@
         <!--<constructor-arg name="lap" ref="laptop"/>-->
         <!--<constructor-arg name="name" value="Mohd Sameer From Constructor"/>-->
     </bean>
-    <bean id="com1" class="org.example.Laptop" primary="true" lazy-init="true">
-    </bean>
+    <!--<bean id="com1" class="org.example.Laptop" primary="true" lazy-init="true">-->
+    <!--</bean>-->
     <bean class="org.example.Desktop" lazy-init="true">
     </bean>
 </beans>
