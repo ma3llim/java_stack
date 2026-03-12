@@ -20,8 +20,8 @@
         <!--<constructor-arg name="lap" ref="laptop"/>-->
         <!--<constructor-arg name="name" value="Mohd Sameer From Constructor"/>-->
     </bean>
-    <bean id="com1" class="org.example.Laptop" primary="true">
+    <bean id="com1" class="org.example.Laptop" primary="true" lazy-init="true">
     </bean>
-    <bean id="com2" class="org.example.Desktop">
+    <bean id="com2" class="org.example.Desktop" lazy-init="true">
     </bean>
 </beans>
