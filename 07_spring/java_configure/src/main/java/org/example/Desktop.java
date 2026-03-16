@@ -8,6 +8,6 @@ public class Desktop implements Computer {
 
     @Override
     public void device(){
-        System.out.print("Compiling Using Desktop");
+        System.out.println("Compiling Using Desktop");
     }
 }
