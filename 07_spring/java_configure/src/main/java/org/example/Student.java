@@ -2,16 +2,15 @@ package org.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.beans.ConstructorProperties;
 
 @Component
+@Primary
 public class Student {
     private String name;
-
-    // @Autowired
-    // @Qualifier("desktop")
     private Computer com;
 
     public Student(){
@@ -36,7 +35,7 @@ public class Student {
     }
 
     @Autowired
-    @Qualifier("desktop")
+    @Qualifier("laptop")
     public void setCom(Computer com) {
         this.com = com;
     }
