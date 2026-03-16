@@ -3,13 +3,13 @@ import org.example.Computer;
 import org.example.Desktop;
 import org.example.Laptop;
 import org.example.Student;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 public class AppConfig {
 
     @Bean()
-    public Student student(@Qualifier("desktop") Computer com){
+    public Student student(Computer com){
         Student obj = new Student();
         obj.setName("Mohd Sameer");
         obj.setCom(com);
@@ -22,6 +22,7 @@ public class AppConfig {
     }
 
     @Bean
+    @Primary
     public Laptop laptop(){
         return new Laptop();
     }
