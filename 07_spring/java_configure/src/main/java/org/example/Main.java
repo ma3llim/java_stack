@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args){
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        Desktop desktopObj = context.getBean(Desktop.class);
+        Desktop desktopObj = context.getBean("sameerDesktop",Desktop.class);
         desktopObj.device();
     }
 }
