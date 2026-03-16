@@ -1,7 +1,10 @@
 package org.example;
 
+import org.springframework.stereotype.Component;
+
 import java.beans.ConstructorProperties;
 
+@Component
 public class Student {
     private String name;
     private Computer com;
