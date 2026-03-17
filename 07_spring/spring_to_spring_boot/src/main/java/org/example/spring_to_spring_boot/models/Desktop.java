@@ -1,12 +1,8 @@
-package com.example;
+package org.example.spring_to_spring_boot.models;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@Primary
-@Scope("prototype")
 public class Desktop implements Computer {
 
     public Desktop(){
@@ -15,6 +11,6 @@ public class Desktop implements Computer {
 
     @Override
     public void device(){
-        System.out.println("Compiling Using Desktop");
+        System.out.print("Compiling Using Desktop");
     }
 }

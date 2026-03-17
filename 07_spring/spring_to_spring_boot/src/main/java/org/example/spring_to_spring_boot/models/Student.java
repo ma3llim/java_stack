@@ -1,16 +1,9 @@
-package com.example;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+package org.example.spring_to_spring_boot.models;
 
 import java.beans.ConstructorProperties;
 
-@Component
 public class Student {
     private String name;
-    @Autowired
     private Computer com;
 
     public Student(){
@@ -34,8 +27,6 @@ public class Student {
         return com;
     }
 
-    @Autowired
-    @Qualifier("laptop")
     public void setCom(Computer com) {
         this.com = com;
     }
