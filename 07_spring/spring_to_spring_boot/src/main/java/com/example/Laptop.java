@@ -1,0 +1,16 @@
+package com.example;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Laptop implements Computer {
+
+    public Laptop(){
+        System.out.println("Object Created For Laptop");
+    }
+
+    @Override
+    public void device() {
+        System.out.println("Compling With Laptop");
+    }
+}
