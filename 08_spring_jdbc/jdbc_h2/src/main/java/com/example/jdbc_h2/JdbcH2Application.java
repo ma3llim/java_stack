@@ -15,7 +15,7 @@ public class JdbcH2Application {
 		ApplicationContext context = SpringApplication.run(JdbcH2Application.class, args);
 
 		Student studentobj = context.getBean(Student.class);
-		studentobj.setRollNo(1);
+		studentobj.setRollNo(4);
 		studentobj.setName("Mohd Sameer");
 		studentobj.setMarks(69);
 
