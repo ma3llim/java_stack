@@ -26,6 +26,9 @@ public class App {
             context.addServletMappingDecoded("/hello", "HelloServlet");
             // 4. Start Server
             tomcat.start();
+            System.out.println("Server running at http://localhost:8080");
+            // 5. Alive server
+            tomcat.getServer().await();
         } catch (LifecycleException e) {
             throw new RuntimeException(e);
         }
