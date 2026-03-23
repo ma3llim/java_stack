@@ -9,4 +9,9 @@ public class JobController {
     public String home(){
         return "home";
     }
+
+    @RequestMapping("addjob")
+    public String addJob(){
+        return "addjob";
+    }
 }
