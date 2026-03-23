@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Form Page</title>
-    <link rel="stylesheet" type="text/css" href="views/style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
