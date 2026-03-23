@@ -11,10 +11,13 @@
     <div class="card">
         <h2>Enter Details</h2>
 
-        <form action="add">
+        <form action="addEmployee" method="get">
 
-            <input type="number" name="num1" placeholder="Number 1"><br><br>
-            <input type="number" name="num2" placeholder="Number 2"><br><br>
+            <label for="id">Enter ID:</label><br>
+            <input type="number" id="id" name="id" placeholder="Enter ID"><br><br>
+
+            <label for="name">Enter Name:</label><br>
+            <input type="text" id="name" name="name" placeholder="Enter Name"><br><br>
 
             <input type="submit" value="Submit">
         </form>

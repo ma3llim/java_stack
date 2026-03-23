@@ -9,7 +9,9 @@
 <body>
 
     <div class="card">
-        <h2>The Result is: ${result}</h2>
+        <h2>Employe Details</h2>
+        <h4>The Result is: ${result}</h2>
+        <p>Welcome to the ${course} world</p>
         <a href="/">Back</a>
     </div>
 
