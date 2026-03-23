@@ -11,7 +11,7 @@
     <div class="card">
         <h2>Enter Details</h2>
 
-        <form method="add">
+        <form action="add">
 
             <input type="number" name="num1" placeholder="Number 1"><br><br>
             <input type="number" name="num2" placeholder="Number 2"><br><br>
