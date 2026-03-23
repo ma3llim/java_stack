@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Result</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Employee Details</h2>
+
+    <h4>
+        The Result is:
+        <span th:text="${result}"></span>
+    </h4>
+
+    <p>
+        Welcome to the
+        <span th:text="${course}"></span> world
+    </p>
+
+    <a th:href="@{/}">Back</a>
+</div>
+
+</body>
+</html>

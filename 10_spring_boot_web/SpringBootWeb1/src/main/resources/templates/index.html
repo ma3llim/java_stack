@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Form Page</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Enter Details</h2>
+
+    <form th:action="@{/addEmployee}" method="get">
+
+        <label for="id">Enter ID:</label><br>
+        <input type="number" id="id" name="id" placeholder="Enter ID"><br><br>
+
+        <label for="name">Enter Name:</label><br>
+        <input type="text" id="name" name="name" placeholder="Enter Name"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+</body>
+</html>
