@@ -9,7 +9,7 @@
 <body>
 
     <div class="card">
-        <h2>The Result is: </h2>
+        <h2>The Result is: ${result}</h2>
         <a href="/">Back</a>
     </div>
 
