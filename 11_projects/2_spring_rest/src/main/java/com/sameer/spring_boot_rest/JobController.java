@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
 @Controller
 @CrossOrigin(origins = "http://localhost:3000")
-public class JobControlller {
+public class JobController {
     @Autowired
     private JobServices services;
 
@@ -20,5 +21,11 @@ public class JobControlller {
     @ResponseBody
     public List<JobPost> getAllJobs(){
         return services.getAllJobs();
+    }
+
+    @GetMapping("jobdetails/{postId}")
+    @ResponseBody
+    public JobPost getJob(@PathVariable int postId){
+        return services.getJob(postId);
     }
 }

@@ -26,4 +26,13 @@ public class JobRepo {
         jobs.add(newJob);
         System.out.println(newJob);
     }
+
+    public JobPost getJobs(int postId) {
+        for(JobPost job: jobs){
+            if(job.getPostId() == postId){
+                return job;
+            }
+        }
+        return null;
+    }
 }
