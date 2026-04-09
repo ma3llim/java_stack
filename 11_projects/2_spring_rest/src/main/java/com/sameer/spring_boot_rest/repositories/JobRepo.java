@@ -18,20 +18,41 @@ public class JobRepo {
             new JobPost(5, "UI/UX Designer", "2026‑03‑18", 2, List.of("Figma", "Adobe XD", "Sketch", "Prototyping"), "Design user‑friendly interfaces and user experiences for web and mobile apps")
     ));
 
-    public List<JobPost> getAllJobs(){
-        return  jobs;
+    public List<JobPost> getAllJobs() {
+        return jobs;
     }
 
-    public void addJob(JobPost newJob){
+    public void addJob(JobPost newJob) {
         jobs.add(newJob);
     }
 
     public JobPost getJobs(int postId) {
-        for(JobPost job: jobs){
-            if(job.getPostId() == postId){
+        for (JobPost job : jobs) {
+            if (job.getPostId() == postId) {
                 return job;
             }
         }
         return null;
+    }
+
+    public void updateJob(JobPost jobPost) {
+        for (JobPost jobPost1 : jobs) {
+            if (jobPost1.getPostId() == jobPost.getPostId()) {
+                jobPost1.setPostId(jobPost.getPostId());
+                jobPost1.setPostProfile(jobPost.getPostProfile());
+                jobPost1.setPostDate(jobPost.getPostDate());
+                jobPost1.setReqExperience(jobPost.getReqExperience());
+                jobPost1.setPostTechStack(jobPost.getPostTechStack());
+                jobPost1.setPostDesc(jobPost.getPostDesc());
+            }
+        }
+    }
+
+    public void deleteJob(int postId) {
+        for (JobPost job3 : jobs) {
+            if (job3.getPostId() == postId) {
+                jobs.remove(postId);
+            }
+        }
     }
 }
