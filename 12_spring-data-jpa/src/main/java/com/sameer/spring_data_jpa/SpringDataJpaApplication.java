@@ -28,9 +28,10 @@ public class SpringDataJpaApplication {
 		s3.setName("Jeevan");
 		s3.setMarks(90);
 
-		repo.save(s1);
-		repo.save(s2);
-		repo.save(s3);
+		// repo.save(s1);
+		// repo.save(s2);
+		// repo.save(s3);
+		System.out.println(repo.findAll());
 	}
 
 }
