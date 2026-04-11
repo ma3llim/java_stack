@@ -31,7 +31,12 @@ public class SpringDataJpaApplication {
 		// repo.save(s1);
 		// repo.save(s2);
 		// repo.save(s3);
-		System.out.println(repo.findById(1));
+
+		// Find By Id
+		// System.out.println(repo.findById(1));
+
+		// Getting By Key Values
+		System.out.println(repo.findByName("Sameer"));
 	}
 
 }
