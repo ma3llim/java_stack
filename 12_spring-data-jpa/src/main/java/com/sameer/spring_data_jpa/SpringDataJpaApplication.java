@@ -44,6 +44,12 @@ public class SpringDataJpaApplication {
 				// 2. Then it will Call Update Query
 
 		// repo.save(s1);
+
+		// Delete Query
+			// Flow
+				// 1. First It Call Select Query to check if then
+				// 2. Then it will Call Delete Query
+		 repo.delete(s1);
 	}
 
 }
