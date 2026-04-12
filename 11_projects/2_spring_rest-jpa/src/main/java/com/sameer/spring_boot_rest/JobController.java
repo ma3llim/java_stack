@@ -45,4 +45,9 @@ public class JobController {
         services.load();
         return "Success";
     }
+
+    @GetMapping("/jobPost/keyword/{keyword}")
+    public List<JobPost> searchByKeyword(@PathVariable("keyword") String keyword) {
+        return services.search(keyword);
+    }
 }
