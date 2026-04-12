@@ -36,7 +36,14 @@ public class SpringDataJpaApplication {
 		// System.out.println(repo.findById(1));
 
 		// Getting By Key Values
-		System.out.println(repo.findByName("Sameer"));
+		// System.out.println(repo.findByName("Sameer"));
+
+		// Update Query
+			// Flow
+				// 1. First It Call Select Query to check if then
+				// 2. Then it will Call Update Query
+
+		// repo.save(s1);
 	}
 
 }
