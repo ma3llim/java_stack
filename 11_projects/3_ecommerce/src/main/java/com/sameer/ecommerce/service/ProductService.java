@@ -45,11 +45,17 @@ public class ProductService {
 
         // update image ONLY if provided
         if (imageFile != null && !imageFile.isEmpty()) {
-            product.setImageName(imageFile.getOriginalFilename());
-            product.setImageType(imageFile.getContentType());
-            product.setImageData(imageFile.getBytes());
+            existing.setImageName(imageFile.getOriginalFilename());
+            existing.setImageType(imageFile.getContentType());
+            existing.setImageData(imageFile.getBytes());
         }
 
-        return productRepo.save(product);
+        return productRepo.save(existing);
+    }
+
+    public void deleteProduct(int productId) {
+        Product product = productRepo.findById(productId).orElseThrow(()-> new RuntimeException("Product Not Found"));
+
+        productRepo.delete(product);
     }
 }
