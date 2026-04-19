@@ -45,5 +45,28 @@ public class ProductController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-    };
+    }
+
+    @PutMapping(value = "product/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateProduct(@PathVariable int productId, @RequestPart("product") String productJson, @RequestPart(value = "imageFile", required = false) MultipartFile imageFile){
+        try {
+            Product product = objectMapper.readValue(productJson, Product.class);
+            Product updateProduct = productService.updateProduct(productId, product, imageFile);
+            return new ResponseEntity<>("Update", HttpStatus.OK);
+        } catch (IOException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/product/{productId}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable int productId){
+        Product product = productService.getProductById(productId);
+
+        if(product != null){
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
