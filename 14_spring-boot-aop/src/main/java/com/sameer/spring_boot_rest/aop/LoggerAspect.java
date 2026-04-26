@@ -1,5 +1,6 @@
 package com.sameer.spring_boot_rest.aop;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
@@ -12,7 +13,7 @@ public class LoggerAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggerAspect.class);
 
     @Before("execution(* com.sameer.spring_boot_rest..*(..))")
-    public void logMethodCall(){
-        LOGGER.info("Method Called");
+    public void logMethodCall(JoinPoint joinPoint){
+        LOGGER.info("Method Called" + joinPoint.getSignature());
     }
 }
