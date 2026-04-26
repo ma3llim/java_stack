@@ -1,6 +1,8 @@
 package com.sameer.spring_security.controller;
 
 import com.sameer.spring_security.model.Student;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,11 @@ public class StudentController {
             new Student(2, "Kiran", "Bloackchain"),
             new Student(3, "Sameer", "React")
     ));
+
+    @GetMapping("csrf-token")
+    public CsrfToken getCsrfToken(HttpServletRequest request){
+        return (CsrfToken) request.getAttribute("_csrf");
+    }
 
     @GetMapping("students")
     public List<Student> getStudents(){
