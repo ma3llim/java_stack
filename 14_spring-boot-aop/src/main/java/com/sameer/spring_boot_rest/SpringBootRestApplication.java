@@ -1,13 +1,13 @@
-package com.sameer.spring_data_rest;
+package com.sameer.spring_boot_rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringDataRestApplication {
+public class SpringBootRestApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringDataRestApplication.class, args);
+		SpringApplication.run(SpringBootRestApplication.class, args);
 	}
 
 }
