@@ -27,17 +27,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(12);
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password(encoder.encode("root"))
-//                .roles("admin")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user);
-//    }
-
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder encoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);

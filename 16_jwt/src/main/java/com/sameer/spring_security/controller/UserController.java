@@ -1,6 +1,7 @@
 package com.sameer.spring_security.controller;
 
 import com.sameer.spring_security.model.User;
+import com.sameer.spring_security.services.JwtService;
 import com.sameer.spring_security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping("/register")
     public User register(@RequestBody User user){
@@ -28,7 +31,14 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody User user){
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            return ResponseEntity.ok("Login Success");
+
+            if (authentication.isAuthenticated()) {
+                String token = jwtService.generateToken(user.getUsername());
+                return ResponseEntity.ok(token);
+            }
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad credentials");
         }
