@@ -11,8 +11,9 @@ import java.util.List;
 
 public class UserPrincipal implements UserDetails {
     private User user;
-    public UserPrincipal(User user){
 
+    public UserPrincipal(User user){
+        this.user = user;
     }
 
     @Override
@@ -21,7 +22,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return user.getPassword();
     }
 
