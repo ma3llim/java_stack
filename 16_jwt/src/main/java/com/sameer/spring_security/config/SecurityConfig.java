@@ -35,13 +35,13 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(user);
     }
-//
-//    @Bean
-//    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder encoder) {
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-//        provider.setPasswordEncoder(encoder);
-//        return provider;
-//    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder encoder) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(encoder);
+        return provider;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { // keep throws
@@ -51,10 +51,10 @@ public class SecurityConfig {
                         .requestMatchers("/register").permitAll()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());
-//                .sessionManagement(session ->
-//                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                );
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
 
         return http.build();
     }
