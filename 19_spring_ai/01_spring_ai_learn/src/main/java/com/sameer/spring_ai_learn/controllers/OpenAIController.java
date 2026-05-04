@@ -1,5 +1,6 @@
 package com.sameer.spring_ai_learn.controllers;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,11 @@ public class OpenAIController {
 
     @GetMapping("{message}")
     public ResponseEntity<String> getAnswer(@PathVariable String message){
-        String response = chatClient.prompt(message).call().content();
+        ChatResponse chatResponse = chatClient.prompt(message).call().chatResponse();
+        System.out.println(chatResponse.getMetadata().getModel());
+        String response = chatResponse.getResult().getOutput().getText();
         System.out.println(response);
+
         return ResponseEntity.ok(response);
     }
 }
