@@ -27,4 +27,9 @@ public class QuestionController {
     public Question addQuestion(@RequestBody Question question){
         return questionServices.addQuestion(question);
     }
+
+    @DeleteMapping("/delete/{questionId}")
+    public String deleteQuestion(@PathVariable Integer questionId){
+        return questionServices.deleteQuestion(questionId);
+    }
 }
