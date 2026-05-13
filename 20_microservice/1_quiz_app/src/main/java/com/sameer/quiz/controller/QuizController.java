@@ -1,7 +1,9 @@
 package com.sameer.quiz.controller;
 
 import com.sameer.quiz.models.QuestionWrapper;
+import com.sameer.quiz.models.quizResponse;
 import com.sameer.quiz.services.QuizServices;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,5 +24,10 @@ public class QuizController {
     @GetMapping("/getquiz/{quizId}")
     public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(@PathVariable Integer quizId){
         return quizServices.getQuizQuestions(quizId);
+    }
+
+    @PostMapping("/submit/{id}")
+    public ResponseEntity<Integer> submitQuiz(@PathVariable Integer id, @RequestBody List<quizResponse> responses){
+        return quizServices.calculateResult(id, responses);
     }
 }

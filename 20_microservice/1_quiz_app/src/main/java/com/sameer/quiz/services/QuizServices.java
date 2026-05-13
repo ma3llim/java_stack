@@ -5,6 +5,7 @@ import com.sameer.quiz.dao.QuizDao;
 import com.sameer.quiz.models.Question;
 import com.sameer.quiz.models.QuestionWrapper;
 import com.sameer.quiz.models.Quiz;
+import com.sameer.quiz.models.quizResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,19 @@ public class QuizServices {
          }
 
          return new ResponseEntity<>(questionWrappers, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Integer> calculateResult(Integer id, List<quizResponse> responses) {
+        Quiz quiz = quizDao.findById(id).get();
+        List<Question> questions = quiz.getQuestions();
+        int right = 0;
+        int i = 0;
+        for (quizResponse response: responses){
+            if(response.getResponse().equals(questions.get(i).getRightAnswer())){
+                right++;
+            }
+            i++;
+        }
+        return new ResponseEntity<>(right, HttpStatus.OK);
     }
 }
