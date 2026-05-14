@@ -18,16 +18,16 @@ public class QuizController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createQuiz(@RequestBody QuizDto quizDto){
-        return quizServices.createQuiz(quizDto.getCategoryName(), quizDto.getNumQuestions(), quizDto.getTitle());
+        return quizServices.createQuiz(quizDto.getCategory(), quizDto.getNumQuestions(), quizDto.getTitle());
     }
 
-    @GetMapping("/getquiz/{quizId}")
-    public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(@PathVariable Integer quizId){
-        return quizServices.getQuizQuestions(quizId);
-    }
-
-    @PostMapping("/submit/{id}")
-    public ResponseEntity<Integer> submitQuiz(@PathVariable Integer id, @RequestBody List<quizResponse> responses){
-        return quizServices.calculateResult(id, responses);
-    }
+//    @GetMapping("/getquiz/{quizId}")
+//    public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(@PathVariable Integer quizId){
+//        return quizServices.getQuizQuestions(quizId);
+//    }
+//
+//    @PostMapping("/submit/{id}")
+//    public ResponseEntity<Integer> submitQuiz(@PathVariable Integer id, @RequestBody List<quizResponse> responses){
+//        return quizServices.calculateResult(id, responses);
+//    }
 }

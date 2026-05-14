@@ -1,6 +1,7 @@
 package com.sameer.quiz_service.services;
 
 import com.sameer.quiz_service.dao.QuizDao;
+import com.sameer.quiz_service.feign.QuizInterface;
 import com.sameer.quiz_service.models.QuestionWrapper;
 import com.sameer.quiz_service.models.Quiz;
 import com.sameer.quiz_service.models.quizResponse;
@@ -18,20 +19,19 @@ public class QuizServices {
     @Autowired
     QuizDao quizDao;
     @Autowired
-//    QuestionDao questionDao;
+    QuizInterface quizInterface;
 
     public ResponseEntity<String> createQuiz(String category, int noOfQuestions, String title) {
-        List<Integer> questions =
-
+        List<Integer> questions = quizInterface.getQuestionsForQuiz(category, noOfQuestions).getBody();
         Quiz quiz = new Quiz();
         quiz.setTitle(title);
-        quiz.setQuestions(questions);
+        quiz.setQuestionIds(questions);
         quizDao.save(quiz);
         return new ResponseEntity<>("Created Quiz Successfully", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(Integer quizId) {
-         Optional<Quiz> quizs = quizDao.findById(quizId);
+//    public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(Integer quizId) {
+//         Optional<Quiz> quizs = quizDao.findById(quizId);
 //         List<Question> questionsFromDB = quizs.get().getQuestions();
 //         List<QuestionWrapper> questionWrappers = new ArrayList<>();
 //         for(Question q : questionsFromDB){
@@ -39,20 +39,20 @@ public class QuizServices {
 //             questionWrappers.add(questionWrapper);
 //         }
 
-         return new ResponseEntity<>(questionWrappers, HttpStatus.OK);
-    }
+//         return new ResponseEntity<>(questionWrappers, HttpStatus.OK);
+//    }
 
-    public ResponseEntity<Integer> calculateResult(Integer id, List<quizResponse> responses) {
-        Quiz quiz = quizDao.findById(id).get();
-        List<Question> questions = quiz.getQuestions();
-        int right = 0;
-        int i = 0;
-        for (quizResponse response: responses){
-            if(response.getResponse().equals(questions.get(i).getRightAnswer())){
-                right++;
-            }
-            i++;
-        }
-        return new ResponseEntity<>(right, HttpStatus.OK);
-    }
+//    public ResponseEntity<Integer> calculateResult(Integer id, List<quizResponse> responses) {
+//        Quiz quiz = quizDao.findById(id).get();
+//        List<Question> questions = quiz.getQuestions();
+//        int right = 0;
+//        int i = 0;
+//        for (quizResponse response: responses){
+//            if(response.getResponse().equals(questions.get(i).getRightAnswer())){
+//                right++;
+//            }
+//            i++;
+//        }
+//        return new ResponseEntity<>(right, HttpStatus.OK);
+//    }
 }
