@@ -13,6 +13,30 @@ public class Book {
         this.isAvailable = isAvailable;
     }
 
+    void borrow(String isbn){
+        if(this.isbn.equals(isbn)){
+            if(!this.isAvailable){
+                this.isAvailable = false;
+                System.out.println("This" + this.title + "Is Now Allocated to you");
+            }else {
+                System.out.println("This" + this.title + "Is Already Borrow.");
+            }
+        }
+        else {
+            System.out.println("ISBN does not match");
+        }
+    }
+
+    void returnBook(String isbn){
+        if(this.isbn.equals(isbn)){
+            this.isAvailable = true;
+            System.out.println("This" + this.title + "Is Return Back");
+        }
+        else {
+            System.out.println("ISBN does not match");
+        }
+    }
+
     String displayInfo(){
         return "Book{" +
                 "title='" + this.title + '\'' +
