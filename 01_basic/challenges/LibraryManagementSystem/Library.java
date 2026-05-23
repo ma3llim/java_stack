@@ -17,11 +17,22 @@ public class Library {
         ArrayList<Book> booksSearchByTitle = new ArrayList<>();
 
         for(Book book: books){
-            if(book.equals(title)){
+            if(book.getTitle().equals(title)){
                 booksSearchByTitle.add(book);
             }
         }
         return booksSearchByTitle;
+    }
+
+    ArrayList<Book> searchByAuthor(String author){
+        ArrayList<Book> booksSearchByAuthor = new ArrayList<>();
+
+        for(Book book: books){
+            if(book.getAuthor().equals(author)){
+                booksSearchByAuthor.add(book);
+            }
+        }
+        return booksSearchByAuthor;
     }
 
     public static void main(String[] args){
