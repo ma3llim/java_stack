@@ -1,9 +1,9 @@
 package ShapeHierarchy;
 
-public class Shape {
+class Shapes{
     String color;
 
-    Shape(String color){
+    Shapes(String color){
         this.color = color;
     }
 
@@ -14,7 +14,13 @@ public class Shape {
     double area(){
         return 0;
     }
+
     double perimeter(){
         return 0;
     }
+}
+
+public class Shape {
+
+
 }
