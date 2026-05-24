@@ -60,6 +60,23 @@ class Rectangle extends Shapes {
     }
 }
 
+// Triangle → area() = ½×b×h
+class Triangle extends Shapes {
+    double base;
+    double height;
+
+    Triangle(String color, double base, double height){
+        super(color);
+        this.base = base;
+        this.height = height;
+    }
+
+    @Override
+    double area(){
+        return 0.5 * base * height;
+    }
+}
+
 public class Shape {
     public static void main(String[] args){
 
