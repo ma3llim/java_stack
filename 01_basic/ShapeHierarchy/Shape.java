@@ -1,5 +1,7 @@
 package ShapeHierarchy;
 
+import java.sql.Array;
+
 class Shapes{
     String color;
 
@@ -79,6 +81,14 @@ class Triangle extends Shapes {
 
 public class Shape {
     public static void main(String[] args){
+        Shapes[] shapes = {
+                new Circle("Red", 5),
+                new Rectangle("Blue", 10, 5),
+                new Triangle("Green", 8, 4)
+        };
 
+        for(Shapes shape: shapes){
+            System.out.println(shape.area());
+        }
     }
 }
