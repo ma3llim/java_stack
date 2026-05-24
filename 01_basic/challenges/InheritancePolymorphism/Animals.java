@@ -7,21 +7,21 @@ class Animal {
     }
 }
 
-class Dog extends Animal {
+class Dog extends AnimalRef {
     @Override
     void makeSound(){
         System.out.println("Bark");
     }
 }
 
-class Cat extends Animal {
+class Cat extends AnimalRef {
     @Override
     void makeSound(){
         System.out.println("Meow");
     }
 }
 
-class Bird extends Animal {
+class Bird extends AnimalRef {
     @Override
     void makeSound(){
         System.out.println("Tweet");
