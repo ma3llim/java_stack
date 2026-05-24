@@ -39,6 +39,27 @@ class Circle extends Shapes {
     }
 }
 
+class Rectangle extends Shapes {
+    double length;
+    double width;
+
+    Rectangle(String color, double length, double width){
+        super(color);
+        this.length = length;
+        this.width = width;
+    }
+
+    @Override
+    double area(){
+        return length * width;
+    }
+
+    @Override
+    double perimeter(){
+        return 2 * (length+width);
+    }
+}
+
 public class Shape {
     public static void main(String[] args){
 
