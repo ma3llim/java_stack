@@ -1,3 +1,5 @@
+package practice;
+
 public class ChainingConstructors {
     public static void main(String[] args){
         StudentDemo s1 =  new StudentDemo();

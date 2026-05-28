@@ -1,3 +1,5 @@
+package practice;
+
 public class StringBuilder {
     public static void main(String[] args) {
         StringBuffer sb = new StringBuffer("First");

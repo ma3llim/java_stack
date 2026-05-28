@@ -1,3 +1,5 @@
+package practice;
+
 class StudentClass {
     private final String name;
     private final int age;

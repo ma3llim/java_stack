@@ -1,3 +1,5 @@
+package practice;
+
 public class Datatypes {
     public static void main(String[] args) {
         int age = 128;

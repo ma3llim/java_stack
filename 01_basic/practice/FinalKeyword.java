@@ -1,3 +1,5 @@
+package practice;
+
 public class FinalKeyword {
     public final String NAME = "Mohd Sameer";
 

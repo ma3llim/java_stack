@@ -1,3 +1,5 @@
+package practice;
+
 // toString Methods
 class Car {
     int noOfWheels, noOfDoors;

@@ -1,3 +1,5 @@
+package practice;
+
 public class AccessModifier {
     public class Car {
         public String brand = "Toyota";

@@ -1,3 +1,5 @@
+package practice;
+
 public class StaticAndFinal {
     public static void main(String[] args){
         Student2 s1 = new Student2("Aditiya", 28, 1);

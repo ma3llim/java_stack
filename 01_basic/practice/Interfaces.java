@@ -1,3 +1,5 @@
+package practice;
+
 interface A {
     String name = "Mohd Sameer"; // final and static
 
