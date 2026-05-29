@@ -2,8 +2,9 @@ package Strings.programs;
 
 public class Main {
     public static void main(String[] args) {
-        String string = "Mohd Sameer";
-        DuplicateCharacters duplicateCharacters = new DuplicateCharacters(string);
-        duplicateCharacters.isduplicateCharacters();
+        String stringOne = "Mohd Sameer";
+        String stringTwo = "Mohd Sameer";
+        Anagrams Anagrams = new Anagrams(stringOne, stringTwo);
+        System.out.println(Anagrams.AnagramCheck());
     }
 }
