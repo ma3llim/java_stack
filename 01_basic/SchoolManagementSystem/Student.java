@@ -6,7 +6,6 @@ public class Student extends Person implements Gradable {
     private Grade grade;
     private String studentId;
 
-
     @Override
     public Grade getGrade() {
         return grade;
