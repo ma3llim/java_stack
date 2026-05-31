@@ -1,6 +1,7 @@
 package ExecptionHandling.bank;
 
 import ExecptionHandling.exceptions.InsufficientBalanceException;
+import ExecptionHandling.exceptions.InsufficientFundsException;
 import ExecptionHandling.exceptions.InvalidAmountException;
 
 public class BankAccount {
@@ -20,14 +21,14 @@ public class BankAccount {
         System.out.println("Deposit Successful, Current Balance: "  + balance);
     }
 
-    public void withdraw(double amount) throws InsufficientBalanceException, InvalidAmountException {
+    public void withdraw(double amount) throws InsufficientBalanceException, InvalidAmountException, InsufficientFundsException {
 
         if (amount <= 0) {
             throw new InvalidAmountException("Withdrawal amount must be greater than 0");
         }
 
         if (amount > balance) {
-            throw new InsufficientBalanceException("Insufficient balance. Available: " + balance);
+            throw new InsufficientFundsException("Insufficient balance. Available: " + balance);
         }
 
         balance -= amount;

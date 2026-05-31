@@ -2,6 +2,7 @@ package ExecptionHandling;
 
 import ExecptionHandling.bank.BankAccount;
 import ExecptionHandling.exceptions.InsufficientBalanceException;
+import ExecptionHandling.exceptions.InsufficientFundsException;
 import ExecptionHandling.exceptions.InvalidAmountException;
 
 public class Main {
@@ -19,8 +20,9 @@ public class Main {
         }
         catch (InsufficientBalanceException e) {
             System.out.println("InsufficientBalanceException: "+ e.getMessage());
-        }
-        finally {
+        } catch (InsufficientFundsException e) {
+            throw new RuntimeException(e);
+        } finally {
             System.out.println("Transaction processing completed.");
         }
     }
