@@ -1,5 +1,6 @@
 package ExecptionHandling;
 
+import ExecptionHandling.File.FileProcessor;
 import ExecptionHandling.bank.BankAccount;
 import ExecptionHandling.exceptions.InsufficientBalanceException;
 import ExecptionHandling.exceptions.InsufficientFundsException;
@@ -25,5 +26,15 @@ public class Main {
         } finally {
             System.out.println("Transaction processing completed.");
         }
+
+        System.out.println();
+        System.out.println("=========================================================================================");
+        System.out.println();
+        FileProcessor processor = new FileProcessor();
+        processor.readFile();
+        System.out.println();
+        processor.writeFile("Hello at the end of the file");
+        processor.readFile();
+        System.out.println();
     }
 }
