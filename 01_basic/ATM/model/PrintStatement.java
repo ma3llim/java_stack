@@ -1,4 +1,4 @@
-package ATM;
+package ATM.model;
 
 interface Printable {
     void printStatement();
