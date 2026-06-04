@@ -1,11 +1,8 @@
 package ATM.model;
 
-enum accountType {
-    SavingsAccount,
-    CurrentAccount;
-}
+import ATM.Exceptions.InsufficientFundsException;
 
-public class Account {
+public class Account implements Transactable {
     private String bankNumber;
     private String name;
     private String contactNumber;
@@ -68,6 +65,57 @@ public class Account {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public void deposit(double amount) {
+        if(amount < 0){
+            try {
+                throw new InsufficientFundsException("Amount must be positive");
+            } catch (InsufficientFundsException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        this.balance += amount;
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if(amount < 0){
+            try {
+                throw new InsufficientFundsException("Amount must be positive");
+            } catch (InsufficientFundsException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if(amount > balance){
+            try {
+                throw new InsufficientFundsException("Insufficient balance");
+            } catch (InsufficientFundsException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        this.balance -= amount;
+    }
+
+    @Override
+    public void transfer(Account recipient, double amount) {
+        if(amount < 0){
+            try {
+                throw new InsufficientFundsException("Amount must be positive");
+            } catch (InsufficientFundsException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if(amount > balance){
+            try {
+                throw new InsufficientFundsException("Insufficient balance");
+            } catch (InsufficientFundsException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        withdraw(amount);
+        recipient.deposit(amount);
     }
 }
 
