@@ -7,8 +7,8 @@ public class SavingsAccount extends Account implements Transactable {
     private double withdrawalLimit;
     private double minimumBalance;
 
-    public SavingsAccount(String bankNumber, String name, String contactNumber, String phoneNumber, String address, double balance){
-        super(bankNumber, name, contactNumber, phoneNumber, address, balance);
+    public SavingsAccount(String bankNumber, String name, String contactNumber, String address, double balance){
+        super(bankNumber, name, contactNumber, address, balance);
         interestRate = 4.0;
         withdrawalLimit = 30000;
         minimumBalance = 1000;

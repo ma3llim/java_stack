@@ -7,8 +7,8 @@ public class CurrentAccount extends Account implements Transactable {
     private double minimumBalance;
     private double withdrawalLimit;
 
-    public CurrentAccount(String bankNumber, String name, String contactNumber, String phoneNumber, String address, double balance){
-        super(bankNumber, name, contactNumber, phoneNumber, address, balance);
+    public CurrentAccount(String bankNumber, String name, String contactNumber, String address, double balance){
+        super(bankNumber, name, contactNumber, address, balance);
         interestRate = 8.0;
         withdrawalLimit = 30000;
         minimumBalance = 5000;
