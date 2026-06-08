@@ -1,3 +1,5 @@
+package practise_files;
+
 import java.util.HashMap;
 import java.util.Map;
 
