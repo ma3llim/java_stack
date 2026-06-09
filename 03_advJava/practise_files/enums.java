@@ -1,3 +1,5 @@
+package practise_files;
+
 enum Status {
     Running, Failed, Pending, Success;
 }

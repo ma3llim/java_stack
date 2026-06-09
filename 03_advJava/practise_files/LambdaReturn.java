@@ -1,3 +1,5 @@
+package practise_files;
+
 @FunctionalInterface
 interface utils {
     int add(int num1, int num2);

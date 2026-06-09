@@ -1,3 +1,5 @@
+package practise_files;
+
 @FunctionalInterface
 interface A {
     void show();

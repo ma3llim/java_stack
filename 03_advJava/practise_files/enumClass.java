@@ -1,3 +1,5 @@
+package practise_files;
+
 enum Laptop {
     Macbook(2000), XPS(2200), Surface(1500), ThinkPad(1800);
 
