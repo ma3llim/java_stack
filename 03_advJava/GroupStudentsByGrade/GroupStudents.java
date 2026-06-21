@@ -1,4 +1,4 @@
-package CollectionsPrograms.GroupStudentsByGrade;
+package GroupStudentsByGrade;
 
 import java.util.ArrayList;
 import java.util.HashMap;

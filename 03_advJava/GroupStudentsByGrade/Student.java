@@ -1,4 +1,4 @@
-package CollectionsPrograms.GroupStudentsByGrade;
+package GroupStudentsByGrade;
 
 public class Student {
     private String name;

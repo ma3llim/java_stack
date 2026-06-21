@@ -1,4 +1,4 @@
-package CollectionsPrograms;
+package Generic;
 
 class Box<T> {
     private T value;

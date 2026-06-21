@@ -1,4 +1,4 @@
-package CollectionsPrograms.StackQuence;
+package StackQuence;
 
 import java.util.LinkedList;
 import java.util.Queue;

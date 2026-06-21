@@ -1,6 +1,5 @@
-package CollectionsPrograms.StackQuence;
+package StackQuence;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class StackExample {
