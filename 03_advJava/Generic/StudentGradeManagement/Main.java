@@ -2,8 +2,6 @@ package Generic.StudentGradeManagement;
 
 import Generic.StudentGradeManagement.model.Student;
 import Generic.StudentGradeManagement.service.GradeService;
-import org.w3c.dom.ls.LSException;
-
 import java.util.*;
 
 public class Main {
