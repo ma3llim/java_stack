@@ -58,5 +58,9 @@ public class Main {
         System.out.println("\n --- Top Scorer ---");
         Optional<Student> getTopScoretResult = gradeService.getTopScore(students);
         System.out.println(getTopScoretResult);
+
+        System.out.println("\n --- Grouping By ---");
+        Map<String, List<Student>> getGroup = gradeService.groupByStudents(students);
+        System.out.println(getGroup);
     }
 }

@@ -50,4 +50,8 @@ public class GradeService {
     public Optional<Student> getTopScore(List<Student> students){
         return students.stream().max(Comparator.comparing(Student::getAverage));
     }
+
+    public Map<String, List<Student>> groupByStudents(List<Student> students){
+        return students.stream().collect(Collectors.groupingBy(s -> s.getAverage() >= 35 ? "Pass" : "Fail"));
+    }
 }
