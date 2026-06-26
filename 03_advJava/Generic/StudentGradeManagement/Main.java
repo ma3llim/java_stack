@@ -62,5 +62,9 @@ public class Main {
         System.out.println("\n --- Grouping By ---");
         Map<String, List<Student>> getGroup = gradeService.groupByStudents(students);
         System.out.println(getGroup);
+
+        System.out.println("\n --- Comma separate username ---");
+        String commaSerparate = gradeService.getTopStudentNames(students, 4);
+        System.out.println(commaSerparate);
     }
 }

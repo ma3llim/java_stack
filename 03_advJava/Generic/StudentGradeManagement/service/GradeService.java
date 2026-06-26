@@ -54,4 +54,8 @@ public class GradeService {
     public Map<String, List<Student>> groupByStudents(List<Student> students){
         return students.stream().collect(Collectors.groupingBy(s -> s.getAverage() >= 35 ? "Pass" : "Fail"));
     }
+
+    public String getTopStudentNames(List<Student> students, int limit){
+        return students.stream().map(Student::getName).limit(limit).collect(Collectors.joining(", "));
+    }
 }
