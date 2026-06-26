@@ -8,12 +8,9 @@ import java.util.stream.Collectors;
 public class GradeService {
     // Converts HashMap data into a List of Student objects
     public List<Student> processRawGrades(Map<String, List<Integer>> rawGrades){
-        List<Student> students = new ArrayList<>();
-        for(Map.Entry<String, List<Integer>> entry :  rawGrades.entrySet()){
-            students.add(new Student(entry.getKey(), entry.getValue()));
-        }
-
-        return students;
+        return rawGrades.entrySet().stream().map(
+                entry -> new Student(entry.getKey(), entry.getValue())
+        ).toList();
     }
 
     // Ranks students using a TreeMap based on their natural sorting order
@@ -44,5 +41,13 @@ public class GradeService {
             count++;
         }
         return topStudent;
+    }
+
+    public List<String> getStudentList(List<Student> students) {
+        return students.stream().map(entry -> entry.getName()).toList();
+    }
+
+    public Optional<Student> getTopScore(List<Student> students){
+        return students.stream().max(Comparator.comparing(Student::getAverage));
     }
 }

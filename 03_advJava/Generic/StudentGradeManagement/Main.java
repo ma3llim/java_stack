@@ -50,5 +50,13 @@ public class Main {
             Student s = topThree.get(i);
             System.out.printf("#%d: %s with Average: %.2f\n", (i+1), s.getName(), s.getAverage());
         }
+
+        System.out.println("\n --- Get Student Name ---");
+        List<String> getStudentsName = gradeService.getStudentList(students);
+        System.out.println(getStudentsName);
+
+        System.out.println("\n --- Top Scorer ---");
+        Optional<Student> getTopScoretResult = gradeService.getTopScore(students);
+        System.out.println(getTopScoretResult);
     }
 }
