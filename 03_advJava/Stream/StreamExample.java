@@ -3,6 +3,7 @@ package Stream;
 import java.lang.classfile.attribute.PermittedSubclassesAttribute;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class StreamExample {
@@ -37,6 +38,18 @@ public class StreamExample {
         // numbers.stream().limit(3).forEach(System.out::println);
 
         // skip
-        numbers.stream().skip(2).forEach(System.out::println);
+        // numbers.stream().skip(2).forEach(System.out::println);
+
+        // findFirst
+        // System.out.println(numbers.stream().findFirst());
+
+        // anyMatch
+        // System.out.println(numbers.stream().anyMatch(n -> n % 2 ==0));
+
+        // allMatch
+        // System.out.println(numbers.stream().allMatch(n -> n % 2 ==0));
+
+        // count
+        System.out.println(numbers.stream().count());
     }
 }
