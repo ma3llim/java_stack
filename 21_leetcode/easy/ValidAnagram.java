@@ -1,5 +1,7 @@
 package easy;
 
+import java.util.Arrays;
+
 public class ValidAnagram {
     boolean isAnagramBruteForce(String s, String t) {
         if(s.length() != t.length()) return false;
@@ -20,12 +22,19 @@ public class ValidAnagram {
         }
         return true;
     }
-    // public boolean isAnagram(String s, String t) {}
+    public boolean isAnagramBetterApproach(String s, String t) {
+        char[] sChar = s.toCharArray();
+        char[] tChar = t.toCharArray();
+        Arrays.sort(sChar);
+        Arrays.sort(tChar);
+
+        return Arrays.equals(sChar, tChar);
+    }
 
     public static void main(String[] args) {
         ValidAnagram validAnagram = new ValidAnagram();
-        System.out.println(validAnagram.isAnagramBruteForce("anagram", "nagaram"));
-        System.out.println(validAnagram.isAnagramBruteForce("rat", "car"));
+        System.out.println(validAnagram.isAnagramBetterApproach("anagram", "nagaram"));
+        System.out.println(validAnagram.isAnagramBetterApproach("rat", "car"));
     }
 }
 
