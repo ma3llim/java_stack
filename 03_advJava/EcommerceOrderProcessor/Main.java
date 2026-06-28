@@ -24,10 +24,14 @@ public class Main {
         orders.add(new Order(11, "Shoes", Category.CLOTHING, 1,  89.99, OrderStatus.PENDING, LocalDate.of(2026, 4, 20)));
         orders.add(new Order(12, "Blender", Category.HOME_APPLIANCES, 2,  59.99, OrderStatus.COMPLETED, LocalDate.of(2026, 5, 1)));
         orders.add(new Order(13, "Tablet", Category.ELECTRONICS,  1, 499.99, OrderStatus.COMPLETED, LocalDate.of(2026, 5, 10)));
-        orders.add(new Order(14, "Jacket", Category.CLOTHING, 1,  120.00, OrderStatus.PENDING, LocalDate.of(2026, 5, 15)));
+        orders.add(new Order(14, "Jacket", Category.CLOTHING, 1,  120.00, OrderStatus.CANCELLED, LocalDate.of(2026, 5, 15)));
         orders.add(new Order(15, "Microwave", Category.HOME_APPLIANCES, 1, 299.99, OrderStatus.COMPLETED, LocalDate.of(2026, 6, 1)));
         OrderService orderService =  new OrderService(orders);
+        List<Order> orderByStatusPENDING = orderService.getOrderStatus(OrderStatus.PENDING);
+        List<Order> orderByStatusCOMPLETED = orderService.getOrderStatus(OrderStatus.COMPLETED);
+        List<Order> orderByStatusCANCELLED = orderService.getOrderStatus(OrderStatus.CANCELLED);
 
+        System.out.println(orderByStatusCANCELLED);
 
 
     }
