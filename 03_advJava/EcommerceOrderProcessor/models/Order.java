@@ -83,16 +83,29 @@ public class Order {
     public double getTotalValue(){
         return price * quantity;
     }
+
     @Override
     public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", productName='" + productName + '\'' +
-                ", category=" + category +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                ", status=" + status +
-                ", date=" + date +
-                '}';
+        String totalValue = String.format("$%,.2f", getTotalValue());
+        String formattedPrice = String.format("$%,.2f", price);
+        String statusSymbol = status == OrderStatus.COMPLETED ? "✓" : "⏳";
+
+        return String.format("""
+            ═══════════════════════════════════════
+              ORDER #%d
+            ═══════════════════════════════════════
+              Product    : %s
+              Category   : %s
+              Quantity   : %d
+              Price      : %s
+              Total      : %s
+              Status     : %s %s
+              Date       : %s
+            ═══════════════════════════════════════
+            """,
+                orderId, productName, category, quantity,
+                formattedPrice, totalValue,
+                status, statusSymbol, date
+        );
     }
 }
