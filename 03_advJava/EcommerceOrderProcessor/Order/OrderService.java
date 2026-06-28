@@ -23,9 +23,16 @@ public class OrderService {
         this.orders = orders;
     }
 
-    public List<Order> getOrderStatus(OrderStatus orderStatus){
+    public List<Order> getOrderStatus(OrderStatus orderStatus) {
         Predicate<Order> statusPredicate = order -> order.getStatus() == orderStatus;
 
         return orders.stream().filter(statusPredicate).collect(Collectors.toList());
+    }
+
+    public double totalRevenue() {
+        return orders.stream()
+                .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
+                .map(order -> order.getPrice() * order.getQuantity())
+                .reduce(0.0, (a, b) -> a + b);
     }
 }
