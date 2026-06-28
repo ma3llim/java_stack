@@ -1,6 +1,7 @@
 package easy;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ContainsDuplicate {
@@ -19,9 +20,20 @@ public class ContainsDuplicate {
         }
         return false;
     }
+    public boolean containsDuplicateOptimalApproach(int[] nums){
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for(int i = 0; i < nums.length; i++){
+            if (hashMap.containsKey(nums[i])){
+                return  true;
+            }
+            hashMap.put(nums[i], hashMap.getOrDefault(nums[i], 1));
+        }
+        return false;
+    }
+
     public static void main(String[] args){
         ContainsDuplicate containsDuplicate = new ContainsDuplicate();
-        System.out.println(containsDuplicate.containsDuplicateBetterAppraoch(new int[]{1, 2, 3, 1}));
-        System.out.println(containsDuplicate.containsDuplicateBetterAppraoch(new int[]{1, 2, 3, 4}));
+        System.out.println(containsDuplicate.containsDuplicateOptimalApproach(new int[]{1, 2, 3, 1}));
+        System.out.println(containsDuplicate.containsDuplicateOptimalApproach(new int[]{1, 2, 3, 4}));
     }
 }
