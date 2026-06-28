@@ -1,10 +1,12 @@
 package EcommerceOrderProcessor.Order;
 
 import EcommerceOrderProcessor.models.Order;
+import EcommerceOrderProcessor.utils.Category;
 import EcommerceOrderProcessor.utils.OrderStatus;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -34,5 +36,11 @@ public class OrderService {
                 .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
                 .map(order -> order.getPrice() * order.getQuantity())
                 .reduce(0.0, (a, b) -> a + b);
+    }
+
+    public Map<Category, List<Order>> groupingByCategory() {
+        return orders.stream().collect(
+                Collectors.groupingBy(Order::getCategory)
+        );
     }
 }
