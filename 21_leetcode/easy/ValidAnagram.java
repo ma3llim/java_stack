@@ -1,9 +1,10 @@
 package easy;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class ValidAnagram {
-    boolean isAnagramBruteForce(String s, String t) {
+    public boolean isAnagramBruteForce(String s, String t) {
         if(s.length() != t.length()) return false;
 
         boolean[] used = new boolean[t.length()];
@@ -23,6 +24,7 @@ public class ValidAnagram {
         return true;
     }
     public boolean isAnagramBetterApproach(String s, String t) {
+        if(s.length() != t.length()) return  false;
         char[] sChar = s.toCharArray();
         char[] tChar = t.toCharArray();
         Arrays.sort(sChar);
@@ -30,11 +32,30 @@ public class ValidAnagram {
 
         return Arrays.equals(sChar, tChar);
     }
+    public boolean isAnagramOptimalApproach(String s, String t){
+        if(s.length() != t.length()) return false;
+        HashMap<Character, Integer> charCounter = new HashMap<>();
+
+        for(char sChar : s.toCharArray()){
+            charCounter.put(sChar, charCounter.getOrDefault(sChar, 0) +1);
+        }
+
+        for(char tChar : t.toCharArray()){
+            charCounter.put(tChar, charCounter.getOrDefault(tChar, 0) -1);
+        }
+
+        for(var keyPair : charCounter.entrySet()){
+            if(keyPair.getValue() != 0) return false;
+        }
+
+        return true;
+    }
+
 
     public static void main(String[] args) {
         ValidAnagram validAnagram = new ValidAnagram();
-        System.out.println(validAnagram.isAnagramBetterApproach("anagram", "nagaram"));
-        System.out.println(validAnagram.isAnagramBetterApproach("rat", "car"));
+        System.out.println(validAnagram.isAnagramOptimalApproach("anagram", "nagaram"));
+        System.out.println(validAnagram.isAnagramOptimalApproach("rat", "car"));
     }
 }
 
