@@ -31,7 +31,7 @@ public class Main {
         List<Order> orderByStatusCOMPLETED = orderService.getOrderStatus(OrderStatus.COMPLETED);
         List<Order> orderByStatusCANCELLED = orderService.getOrderStatus(OrderStatus.CANCELLED);
 
-        System.out.println(orderService.groupingByCategory());
+        System.out.println(orderService.monthlyRevenue());
 
 
     }
