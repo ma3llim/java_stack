@@ -14,7 +14,7 @@ public class BestTimeToBuyAndSellStock {
     public int maxProfileBetterApproach(int[] prices){
         int minSoFar = prices[0];
         int res = 0;
-        for(int i = 0; i < prices.length-1; i++){
+        for(int i = 1; i < prices.length; i++){
             minSoFar = Math.min(minSoFar, prices[i]);
             res = Math.max(res, prices[i] - minSoFar);
         }
@@ -24,8 +24,10 @@ public class BestTimeToBuyAndSellStock {
     public static void main(String[] args) {
         int[] prices = new int[]{7, 1, 5, 3, 6, 4};
         int[] prices2 = new int[]{7, 6, 4, 3, 1};
+        int[] prices3 = new int[]{1, 2};
         BestTimeToBuyAndSellStock bestTimeToBuyAndSellStock = new BestTimeToBuyAndSellStock();
         System.out.println(bestTimeToBuyAndSellStock.maxProfileBetterApproach(prices));
         System.out.println(bestTimeToBuyAndSellStock.maxProfileBetterApproach(prices2));
+        System.out.println(bestTimeToBuyAndSellStock.maxProfileBetterApproach(prices3));
     }
 }
