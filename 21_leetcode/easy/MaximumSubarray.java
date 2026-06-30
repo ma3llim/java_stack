@@ -17,10 +17,24 @@ public class MaximumSubarray {
         return maxSum;
     }
 
+    public int maxSubArrayBetterForce(int[] nums) {
+        int maxSum = Integer.MIN_VALUE;
+
+        for (int start = 0; start < nums.length; start++) {
+            int currentSum = 0;
+            for (int end = start; end < nums.length; end++) {
+                currentSum += nums[end];
+                maxSum = Math.max(currentSum, maxSum);
+            }
+
+        }
+        return maxSum;
+    }
+
     public static void main(String[] args) {
         MaximumSubarray maximumSubarray = new MaximumSubarray();
-        System.out.println(maximumSubarray.maxSubArrayBruteForce(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
-        System.out.println(maximumSubarray.maxSubArrayBruteForce(new int[]{1}));
-        System.out.println(maximumSubarray.maxSubArrayBruteForce(new int[]{5, 4, -1, 7, 8}));
+        System.out.println(maximumSubarray.maxSubArrayBetterForce(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+        System.out.println(maximumSubarray.maxSubArrayBetterForce(new int[]{1}));
+        System.out.println(maximumSubarray.maxSubArrayBetterForce(new int[]{5, 4, -1, 7, 8}));
     }
 }
