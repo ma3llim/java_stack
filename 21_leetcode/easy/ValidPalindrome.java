@@ -7,9 +7,27 @@ public class ValidPalindrome {
         return clearnString.equals(reversedString);
     }
 
+    public boolean isPalindromeOptimal(String s) {
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
+                left++;
+            }
+            while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
+                right--;
+            }
+            if (Character.isLowerCase(s.charAt(left)) != Character.isLowerCase(s.charAt(right))) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         ValidPalindrome validPalindrome = new ValidPalindrome();
-        System.out.println(validPalindrome.isPalindromeBruteForce("A man, a plan, a canal: Panama"));
-        System.out.println(validPalindrome.isPalindromeBruteForce("race a car"));
+        System.out.println(validPalindrome.isPalindromeOptimal("A man, a plan, a canal: Panama"));
+        System.out.println(validPalindrome.isPalindromeOptimal("race a car"));
     }
 }
