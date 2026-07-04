@@ -13,13 +13,25 @@ public class ReverseString {
     public void reverseStringBetter(char[] s) {
         char[] result = new char[s.length];
         int j = 0;
-        
+
         for (int i = s.length - 1; i >= 0; i--) {
             result[j] = s[i];
             j++;
         }
         for (int i = 0; i < s.length; i++) {
             s[i] = result[i];
+        }
+    }
+
+    public void reverseStringOptimal(char[] s) {
+        int left = 0, right = s.length;
+        while (left < right) {
+            char temp = s[left];
+            s[left] = s[right];
+            s[right] = temp;
+
+            left++;
+            right--;
         }
     }
 
