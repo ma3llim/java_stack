@@ -4,6 +4,7 @@ import com.sun.jdi.ArrayReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class GroupAnagrams {
@@ -41,10 +42,29 @@ public class GroupAnagrams {
         return Arrays.equals(charS1, charS2);
     }
 
+    public List<List<String>> groupAnagramOptimal(String[] strs) {
+        HashMap<String, List<String>> map = new HashMap<>();
+
+        for (String word : strs) {
+            char[] charWord = word.toCharArray();
+            Arrays.sort(charWord);
+            String sortedString = new String(charWord);
+
+            if (map.containsKey(sortedString)) {
+                map.get(sortedString).add(word);
+            } else {
+                List<String> group = new ArrayList<>();
+                group.add(word);
+                map.put(sortedString, group);
+            }
+        }
+        return new ArrayList<>(map.values());
+    }
+
     public static void main(String[] args) {
         GroupAnagrams groupAnagrams = new GroupAnagrams();
-        System.out.println(groupAnagrams.groupAnagramsBruteForce(new String[]{"eat", "tea", "tan", "ate", "nat", "bat"}));
-//        groupAnagrams.groupAnagramsBruteForce(new String[]{""});
-//        groupAnagrams.groupAnagramsBruteForce(new String[]{"a"});
+        System.out.println(groupAnagrams.groupAnagramOptimal(new String[]{"eat", "tea", "tan", "ate", "nat", "bat"}));
+//        groupAnagrams.groupAnagramOptimal(new String[]{""});
+//        groupAnagrams.groupAnagramOptimal(new String[]{"a"});
     }
 }
