@@ -37,6 +37,6 @@ public class ReverseString {
 
     public static void main(String[] args) {
         ReverseString reverseString = new ReverseString();
-        System.out.println(reverseString.reverseStringBetter(new char[]{'h', 'e', 'l', 'l', 'o'}));
+//        System.out.println(reverseString.reverseStringBetter(new char[]{'h', 'e', 'l', 'l', 'o'}));
     }
 }
