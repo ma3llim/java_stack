@@ -120,13 +120,22 @@ public class App {
                     }
                     break;
 
+                case 6:
+                    System.out.println("Enter the Ticket Id:");
+                    String ticketId = scanner.next();
+                    if (ticketId.isEmpty()) {
+                        System.out.println("Ticket Id Is Required");
+                        return;
+                    }
+                    userBookingService.cancelBooking(ticketId);
+                    break;
 
-//                case 6:
                 case 7:
                     System.out.println("Thank you! Exiting...");
                     scanner.close();
                     System.exit(0);
                     break;
+
                 default:
                     System.out.println("Invalid option. Try again.");
             }
