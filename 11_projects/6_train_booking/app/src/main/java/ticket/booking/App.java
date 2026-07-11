@@ -1,13 +1,12 @@
 package ticket.booking;
 
+import ticket.booking.entities.Train;
 import ticket.booking.entities.User;
 import ticket.booking.services.UserBookingService;
 import ticket.booking.utils.UserServiceUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class App {
     public static void main(String[] args) {
@@ -34,6 +33,7 @@ public class App {
             System.out.println("7. Exit the App");
 
             option = scanner.nextInt();
+            Train trainSelectedForBooking = new Train();
 
             switch (option) {
                 case 1:
@@ -60,9 +60,39 @@ public class App {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                    break;
 
                 case 3:
                     userBookingService.fetchBooking();
+                    break;
+
+                case 4:
+                    System.out.println("Type Your Source Station");
+                    String source = scanner.next();
+                    System.out.println("Type Your Destination Station");
+                    String destination = scanner.next();
+                    List<Train> trains = userBookingService.getTrains(source, destination);
+                    int index = 1;
+                    for (Train train : trains) {
+                        System.out.println(index + " Train Id: " + train.getTrainId());
+                        for (Map.Entry<String, String> entry : train.getStationTimes().entrySet()) {
+                            System.out.println("Station " + entry.getKey() + " Time: " + entry.getValue());
+                        }
+                        index++;
+                    }
+                    System.out.println("Select a train by typing 1,2,3...");
+                    trainSelectedForBooking = trains.get(scanner.nextInt() - 1);
+                    break;
+
+//                case 5:
+//                case 6:
+                case 7:
+                    System.out.println("Thank you! Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid option. Try again.");
             }
         }
     }
