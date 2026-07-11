@@ -9,9 +9,8 @@ import ticket.booking.utils.UserServiceUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserBookingService {
@@ -143,6 +142,41 @@ public class UserBookingService {
         try {
             TrainService trainService = new TrainService();
             return trainService.searchTrains(source, destination);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Boolean bookTrainSeat(Train trainSelectedForBooking, int row, int col) {
+        try {
+            TrainService trainService = new TrainService();
+            List<List<Integer>> seats = trainSelectedForBooking.getSeats();
+            if (row >= 0 && row < seats.size() && col >= 0 && col < seats.get(row).size()) {
+                if (seats.get(row).get(col) == 0) {
+                    seats.get(row).set(col, 1);
+
+                    trainSelectedForBooking.setSeats(seats);
+                    trainService.updateTrain(trainSelectedForBooking);
+
+                    Ticket ticket = new Ticket(UUID.randomUUID().toString(), user.getUserId(),
+                            trainSelectedForBooking.getStations().getFirst(), trainSelectedForBooking.getStations().getLast(),
+                            new Date(), trainSelectedForBooking
+                    );
+                    user.getTicketsBooked().add(ticket);
+                    System.out.println("Seat booked successfully  !  ");
+
+                    System.out.println(ticket.getTicketInfo());
+
+                    saveUserListToFile();
+                    return true;
+                } else {
+                    System.out.println("Seat is Already Booked By Someone Else");
+                    return false;
+                }
+            } else {
+                System.out.println("You Enter Invalid Row or Columns");
+                return false;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

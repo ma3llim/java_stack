@@ -1,5 +1,7 @@
 package ticket.booking.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -83,6 +85,7 @@ public class Ticket {
                 '}';
     }
 
+    @JsonIgnore
     public String getTicketInfo() {
         String dateStr = dateOfTravel != null
                 ? new SimpleDateFormat("dd-MM-yyyy").format(dateOfTravel)
