@@ -19,7 +19,7 @@ public class UserInfoDTO extends UserInfo {
     private String email;
     private Long phoneNumber;
 
-    public UserInfoDTO(String userID, String username, String password, Set<UserRole> roles) {
-        super(userID, username, password, roles);
+    public UserInfoDTO(String userId, String username, String password, Set<UserRole> roles) {
+        super(userId, username, password, roles);
     }
 }

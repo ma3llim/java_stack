@@ -50,6 +50,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return false;
         }
         String userId = UUID.randomUUID().toString();
+        userInfoDTO.setUserId(userId);
         userRepository.save(new UserInfo(userId, userInfoDTO.getUsername(), userInfoDTO.getPassword(), new HashSet<>()));
 
         userInfoProducer.sendEventTOKafka(userInfoDTO);

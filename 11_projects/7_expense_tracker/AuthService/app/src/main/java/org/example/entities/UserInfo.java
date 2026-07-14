@@ -18,7 +18,7 @@ import java.util.Set;
 public class UserInfo {
     @Id
     @Column(name = "user_id")
-    private String userID;
+    private String userId;
     private String username;
     private String password;
 
