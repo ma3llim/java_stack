@@ -14,7 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class TokenController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -23,7 +25,7 @@ public class TokenController {
     @Autowired
     private JwtService jwtService;
 
-    @PostMapping("auth/v1/login")
+    @PostMapping("/auth/v1/login")
     public ResponseEntity AuthenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
@@ -37,7 +39,7 @@ public class TokenController {
         }
     }
 
-    @PostMapping("auth/v1/refreshToken")
+    @PostMapping("/auth/v1/refreshToken")
     public JwtResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequestDTO) {
         return refreshTokenService.findByToken(refreshTokenRequestDTO.getToken())
                 .map(refreshTokenService::verifyExpiration)
