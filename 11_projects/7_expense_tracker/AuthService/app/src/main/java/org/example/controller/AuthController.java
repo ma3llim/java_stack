@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.entities.RefreshToken;
+import org.example.eventProducer.UserInfoProducer;
 import org.example.model.UserInfoDTO;
 import org.example.model.response.JwtResponse;
 import org.example.services.JwtService;

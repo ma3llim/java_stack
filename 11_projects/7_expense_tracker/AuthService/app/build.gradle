@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-security:4.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.kafka:spring-kafka'
 
     implementation 'org.modelmapper:modelmapper:3.2.6'
     runtimeOnly 'com.mysql:mysql-connector-j:9.4.0'

@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserInfoDTO extends UserInfo {
     private String username;
     private String lastName;
