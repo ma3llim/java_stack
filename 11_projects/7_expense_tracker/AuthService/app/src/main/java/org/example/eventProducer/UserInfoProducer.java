@@ -22,6 +22,17 @@ public class UserInfoProducer {
 
     public void sendEventTOKafka(UserInfoDTO userInfo) {
         Message<UserInfoDTO> message = MessageBuilder.withPayload(userInfo).setHeader(KafkaHeaders.TOPIC, TOPIC_NAME).build();
-        kafkaTemplate.send((message));
+        kafkaTemplate.send(message).whenComplete((result, exception) -> {
+            if (exception != null) {
+                System.out.println("Kafka message failed: " + exception.getMessage());
+            } else {
+                System.out.println(
+                        "Kafka message sent successfully to topic: "
+                                + result.getRecordMetadata().topic()
+                                + " partition: "
+                                + result.getRecordMetadata().partition()
+                );
+            }
+        });
     }
 }

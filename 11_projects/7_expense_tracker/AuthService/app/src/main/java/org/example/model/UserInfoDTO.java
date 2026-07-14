@@ -13,13 +13,14 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserInfoDTO extends UserInfo {
+    private String userId;
     private String username;
+    private String password;
+    private Set<UserRole> roles;
+    private String firstName;
     private String lastName;
     private String email;
     private Long phoneNumber;
-
-    public UserInfoDTO(String userId, String username, String password, Set<UserRole> roles) {
-        super(userId, username, password, roles);
-    }
 }
