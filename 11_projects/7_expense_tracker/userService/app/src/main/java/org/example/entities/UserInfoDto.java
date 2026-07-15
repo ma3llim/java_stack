@@ -18,19 +18,15 @@ public class UserInfoDto {
     private String userId;
 
     @JsonProperty("first_name")
-    @NonNull
     private String firstName;
 
     @JsonProperty("last_name")
-    @NonNull
     private String lastName;
 
     @JsonProperty("phone_number")
-    @NonNull
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @JsonProperty("email")
-    @NonNull
     private String email;
 
     @JsonProperty("profile_pic")
@@ -44,5 +40,17 @@ public class UserInfoDto {
                 .email(email)
                 .profilePic(profilePic)
                 .phoneNumber(phoneNumber).build();
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfoDto{" +
+                "userId='" + userId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", profilePic='" + profilePic + '\'' +
+                '}';
     }
 }

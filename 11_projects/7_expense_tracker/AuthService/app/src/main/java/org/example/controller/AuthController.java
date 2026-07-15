@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import org.example.entities.RefreshToken;
-import org.example.eventProducer.UserInfoProducer;
 import org.example.model.UserInfoDTO;
 import org.example.model.response.JwtResponse;
 import org.example.services.JwtService;
@@ -25,7 +24,6 @@ public class AuthController {
 
     @PostMapping("auth/v1/signup")
     public ResponseEntity Signup(@RequestBody UserInfoDTO userInfo) {
-        System.out.println(userInfo);
         try {
             Boolean isSignUpedUser = userDetailsService.signUpUser(userInfo);
             if (Boolean.FALSE.equals(isSignUpedUser)) {

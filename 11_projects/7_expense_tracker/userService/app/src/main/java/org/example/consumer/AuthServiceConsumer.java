@@ -16,7 +16,7 @@ public class AuthServiceConsumer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "${spring.kafka.topic-json.name}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${spring.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
     public void listen(UserInfoDto eventData){
         try {
             System.out.println(eventData);
