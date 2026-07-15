@@ -1,4 +1,4 @@
-package org.example.consumer;
+package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entities.UserInfoDto;
