@@ -16,16 +16,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
 public class Expense {
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(name = "external_id")
     private String externalId;
     @Column(name = "user_id")
     private String userId;
-    @Column(name="amount")
+    @Column(name = "amount")
     private BigDecimal amount;
     @Column(name = "merchant")
     private String merchant;
@@ -37,8 +38,8 @@ public class Expense {
 
     @PrePersist
     @PreUpdate
-    private void generateExternalId(){
-        if(this.externalId == null){
+    private void generateExternalId() {
+        if (this.externalId == null) {
             this.externalId = UUID.randomUUID().toString();
         }
     }
