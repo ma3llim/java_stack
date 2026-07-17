@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -32,6 +33,7 @@ public class Expense {
     private String merchant;
     @Column(name = "currency")
     private String currency;
+    @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
 
