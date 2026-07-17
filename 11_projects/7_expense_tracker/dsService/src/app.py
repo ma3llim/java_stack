@@ -40,6 +40,13 @@ def handle_message():
 
     return jsonify(result)
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({
+        "status": "UP",
+        "service": "ds-service",
+        "kafka": os.getenv("BOOTSTRAP_SERVERS")
+    }), 200
 
 if __name__ == "__main__":
     app.run(
