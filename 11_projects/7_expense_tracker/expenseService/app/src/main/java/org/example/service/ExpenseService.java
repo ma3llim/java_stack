@@ -15,14 +15,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ExpenseService {
     private ExpenseRepository expenseRepository;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
 
     @Autowired
     ExpenseService(ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
+        this.objectMapper = new ObjectMapper();
     }
 
     public boolean createExpense(ExpenseDto expenseDto) {

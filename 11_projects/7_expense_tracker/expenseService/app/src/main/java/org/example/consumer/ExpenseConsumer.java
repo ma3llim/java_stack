@@ -9,11 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ExpenseConsumer {
-    private ExpenseService expenseService;
+    private final ExpenseService expenseService;
 
     @KafkaListener(topics = "${spring.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
     public void listen(ExpenseDto eventData) {
-        System.out.println("Received from Kafka: " + eventData);
         try {
             expenseService.createExpense(eventData);
         } catch (Exception ex) {
