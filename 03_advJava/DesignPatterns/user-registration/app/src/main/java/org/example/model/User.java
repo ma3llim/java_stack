@@ -1,13 +1,13 @@
 package org.example.model;
 
 public class User {
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private int age;
-    private String address;
-    private String country;
-    private Boolean newsletterEnabled;
+    private final String name;
+    private final String email;
+    private final String phoneNumber;
+    private final int age;
+    private final String address;
+    private final String country;
+    private final Boolean newsletterEnabled;
 
     private User(Builder builder) {
         this.name = builder.name;
