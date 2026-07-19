@@ -25,6 +25,7 @@ dependencies {
     // This dependency is used by the application.
     implementation libs.guava
     implementation 'org.springframework.boot:spring-boot-starter-web:4.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:4.1.0'
     implementation 'org.springframework.boot:spring-boot-devtools:4.1.0'
 }
 
