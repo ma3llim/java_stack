@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.products.entities.Product;
 import org.products.exceptions.ProductNotFound;
 import org.products.services.ProductService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,5 +23,15 @@ public class ProductController {
     @GetMapping("/{productId}")
     public Product getProductById(@PathVariable UUID productId) throws ProductNotFound {
         return productService.getProductById(productId);
+    }
+
+    @GetMapping("/category/{category}")
+    public List<Product> getProductByCategory(@PathVariable String category) {
+        return productService.getProductByCategory(category);
+    }
+
+    @DeleteMapping("{productId}")
+    public Object deleteProduct(@PathVariable UUID productId) throws ProductNotFound {
+        return productService.deleteProductById(productId);
     }
 }

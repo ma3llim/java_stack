@@ -42,4 +42,21 @@ public class ProductService {
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFound("Product Not Found of this product ID: " + productId));
     }
+
+    public List<Product> getProductByCategory(String category) {
+        return productList.stream().filter(product -> product.getCategory().equalsIgnoreCase(category)).toList();
+    }
+
+    public Product deleteProductById(UUID productId) throws ProductNotFound {
+        if (productId.toString().isEmpty() || productId == null) {
+            new RuntimeException("Product ID is required for deleting");
+            return null;
+        }
+        Product exisitedProduct = productList.stream().filter(product -> product.getId().equals(productId)).findFirst()
+                .orElseThrow(() -> new ProductNotFound("Product not found with id: " + productId));
+
+        productList.remove(exisitedProduct);
+
+        return exisitedProduct;
+    }
 }
