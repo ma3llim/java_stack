@@ -29,7 +29,6 @@ public class User {
     private boolean isLogin;
     private Instant lastLoginAt;
     private String gender;
-    private Address address;
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Provider provider = Provider.INTERNAL;

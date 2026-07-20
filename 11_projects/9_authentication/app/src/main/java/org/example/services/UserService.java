@@ -1,8 +1,10 @@
 package org.example.services;
 
 import org.example.dtos.UserDto;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
     // Create User
@@ -12,14 +14,14 @@ public interface UserService {
     UserDto getUserByEmail(String email);
 
     // Update a user
-    UserDto updateUser(UserDto userDto, String userId);
+    UserDto updateUser(UserDto userDto, UUID userId);
 
     // delete user
-    void deleteUser(String userId);
+    String deleteUser(UUID userId);
 
     // Get User By id
-    UserDto getUserById(String userId);
+    UserDto getUserById(UUID userId);
 
     // Get all users
-    Iterator<UserDto> getAllUsers();
+    List<UserDto> getAllUsers();
 }
