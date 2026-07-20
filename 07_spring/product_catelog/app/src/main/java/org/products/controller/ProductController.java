@@ -2,6 +2,7 @@ package org.products.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.products.entities.Product;
+import org.products.exceptions.ProductNotFound;
 import org.products.services.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public Product getProductById(@PathVariable UUID productId) {
+    public Product getProductById(@PathVariable UUID productId) throws ProductNotFound {
         return productService.getProductById(productId);
     }
 }

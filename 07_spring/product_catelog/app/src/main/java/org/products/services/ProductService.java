@@ -36,13 +36,10 @@ public class ProductService {
         return productList;
     }
 
-    public Product getProductById(UUID productId) {
+    public Product getProductById(UUID productId) throws ProductNotFound {
         return productList.stream()
                 .filter(product1 -> product1.getId().equals(productId))
-                .findFirst().orElseThrow(() -> {
-                            new ProductNotFound("Product Not Found of this product ID: " + productId);
-                            return null;
-                        }
-                );
+                .findFirst()
+                .orElseThrow(() -> new ProductNotFound("Product Not Found of this product ID: " + productId));
     }
 }
