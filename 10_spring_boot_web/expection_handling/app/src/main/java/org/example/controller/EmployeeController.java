@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.exceptions.DuplicateException;
 import org.example.exceptions.NotFoundException;
 import org.example.dtos.EmployeeDto;
@@ -24,7 +25,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeDto addEmployee(@RequestBody EmployeeDto employeeDto) throws DuplicateException {
+    public EmployeeDto addEmployee(@Valid @RequestBody EmployeeDto employeeDto) throws DuplicateException {
         return employeeService.saveEmployee(employeeDto);
     }
 
