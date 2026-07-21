@@ -1,0 +1,9 @@
+app:
+  # pagination configs
+  pagination:
+    max-size: 20
+    default-size: 10
+
+  service:
+    name: product-catalog
+    version: 1.0.0

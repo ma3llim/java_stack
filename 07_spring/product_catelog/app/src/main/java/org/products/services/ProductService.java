@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.products.Dtos.request.ProductRequestDTO;
 import org.products.Dtos.response.PageResponse;
 import org.products.Dtos.response.ProductResponseDTO;
+import org.products.config.AppProperties;
+import org.products.config.PaginationProperties;
 import org.products.entities.Product;
 import org.products.enums.Category;
 import org.products.exceptions.ProductNotFound;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductService {
     private final List<Product> productList = new ArrayList<>();
+    private final PaginationProperties paginationProperties;
 
     @PostConstruct
     public void init() {
@@ -101,7 +104,11 @@ public class ProductService {
         }
         if (limit < 1) {
             log.warn("Limit {} is invalid, resetting to 10", limit);
-            limit = 10;
+            limit = paginationProperties.getDefaultSize();
+        }
+        if (limit > paginationProperties.getMaxSize()) {
+            log.warn("Limit {} exceeds max {}, capping to {}", limit, paginationProperties.getMaxSize(), paginationProperties.getMaxSize());
+            limit = paginationProperties.getMaxSize();
         }
         log.info("After validation - page: {}, limit: {}", page, limit);
 
