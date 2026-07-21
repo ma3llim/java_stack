@@ -3,6 +3,7 @@ package org.products.services;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.products.Dtos.request.ProductRequestDTO;
 import org.products.Dtos.response.PageResponse;
 import org.products.Dtos.response.ProductResponseDTO;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
     private final List<Product> productList = new ArrayList<>();
 
@@ -89,63 +91,107 @@ public class ProductService {
     }
 
     public ResponseEntity<PageResponse<ProductResponseDTO>> getProducts(int page, int limit, String sortBy, String direction, String search, Double minPrice, Double maxPrice) {
-        if (page < 0) page = 0;
-        if (limit < 1) limit = 10;
+        log.info("=== GET PRODUCTS REQUEST ===");
+        log.info("Raw params - page: {}, limit: {}, sortBy: '{}', direction: '{}', search: '{}', minPrice: {}, maxPrice: {}",
+                page, limit, sortBy, direction, search, minPrice, maxPrice);
 
-        // FILTER first (all filters optional - null means no filter)
+        if (page < 0) {
+            log.warn("Page {} is negative, resetting to 0", page);
+            page = 0;
+        }
+        if (limit < 1) {
+            log.warn("Limit {} is invalid, resetting to 10", limit);
+            limit = 10;
+        }
+        log.info("After validation - page: {}, limit: {}", page, limit);
+
+        // FILTER
         List<Product> filtered = productList.stream()
-                .filter(p -> search == null || search.isBlank() || p.getName().toLowerCase().contains(search.toLowerCase()))
-                .filter(p -> minPrice == null || p.getPrice() >= minPrice)
-                .filter(p -> maxPrice == null || p.getPrice() <= maxPrice)
+                .filter(p -> {
+                    boolean match = search == null || search.isBlank() || p.getName().toLowerCase().contains(search.toLowerCase());
+                    if (!match) log.debug("FILTERED OUT by search: {}", p.getName());
+                    return match;
+                })
+                .filter(p -> {
+                    boolean match = minPrice == null || p.getPrice() >= minPrice;
+                    if (!match) log.debug("FILTERED OUT by minPrice: {} < {}", p.getName(), minPrice);
+                    return match;
+                })
+                .filter(p -> {
+                    boolean match = maxPrice == null || p.getPrice() <= maxPrice;
+                    if (!match) log.debug("FILTERED OUT by maxPrice: {} > {}", p.getName(), maxPrice);
+                    return match;
+                })
                 .toList();
+
+        log.info("Filter result: {} of {} products match", filtered.size(), productList.size());
 
         int totalElements = filtered.size();
         int totalPages = (int) Math.ceil((double) totalElements / limit);
+        log.info("Pagination meta - totalElements: {}, totalPages: {}", totalElements, totalPages);
 
         int start = page * limit;
+        log.info("Calculated start: {} (page {} * limit {})", start, page, limit);
+
         if (start >= totalElements) {
+            log.warn("Start {} >= totalElements {}, resetting to page 0", start, totalElements);
             start = 0;
             page = 0;
         }
 
-        if (sortBy == null || sortBy.isBlank()) sortBy = "name";
-        if (direction == null || direction.isBlank()) direction = "asc";
+        if (sortBy == null || sortBy.isBlank()) {
+            log.info("sortBy is null/blank, defaulting to 'name'");
+            sortBy = "name";
+        }
+        if (direction == null || direction.isBlank()) {
+            log.info("direction is null/blank, defaulting to 'asc'");
+            direction = "asc";
+        }
+        log.info("Final sort - sortBy: '{}', direction: '{}'", sortBy, direction);
 
         List<ProductResponseDTO> content = filtered.stream()
                 .sorted(getComparator(sortBy, direction))
+                .peek(p -> log.debug("After sort: {} - {}", p.getName(), p.getPrice()))
                 .skip(start)
                 .limit(limit)
+                .peek(p -> log.debug("After pagination: {} - {}", p.getName(), p.getPrice()))
                 .map(Product::toResponseDTO)
                 .collect(Collectors.toList());
 
+        log.info("Returning {} items for page {}", content.size(), page);
+
         PageResponse<ProductResponseDTO> response = new PageResponse<ProductResponseDTO>(
-                content,
-                page,
-                limit,
-                totalElements,
-                totalPages,
-                page > 0,
-                page < totalPages - 1
+                content, page, limit, totalElements, totalPages,
+                page > 0, page < totalPages - 1
         );
+
+        log.info("=== RESPONSE === page: {}, size: {}, totalElements: {}, totalPages: {}, hasPrevious: {}, hasNext: {}",
+                response.getPage(), response.getSize(), response.getTotalElements(),
+                response.getTotalPages(), response.isHasPrevious(), response.isHasNext());
+
         return ResponseEntity.ok(response);
     }
 
     public ResponseEntity<ProductResponseDTO> getProductById(UUID productId) throws ProductNotFound {
+        log.info("Fetching product with ID: {}", productId);
         Product product = productList.stream()
                 .filter(product1 -> product1.getId().equals(productId))
                 .findFirst().orElseThrow(() -> new ProductNotFound("Product Not Found of this product ID: " + productId));
 
         ProductResponseDTO productResponseDTO = product.toResponseDTO();
 
+        log.info("Product found: {}", product.getName());
         return ResponseEntity.ok(productResponseDTO);
-
     }
 
     public List<ProductResponseDTO> getProductByCategory(String category) {
-        return productList.stream()
+        log.info("Fetching products for category: {}", category);
+        List<ProductResponseDTO> products = productList.stream()
                 .filter(product -> product.getCategory().equalsIgnoreCase(category))
                 .map(Product::toResponseDTO)
                 .collect(Collectors.toList());
+        log.info("Found {} products in category '{}'", products.size(), category);
+        return products;
     }
 
     public void deleteProductById(UUID productId) throws ProductNotFound {
@@ -159,6 +205,16 @@ public class ProductService {
     }
 
     public ProductResponseDTO addProduct(ProductRequestDTO productRequest) {
+        log.info("Adding new product: {}", productRequest.getName());
+
+        // Optional: Check for duplicate name
+        boolean exists = productList.stream()
+                .anyMatch(p -> p.getName().equalsIgnoreCase(productRequest.getName()));
+        if (exists) {
+            log.warn("Product with name '{}' already exists", productRequest.getName());
+            throw new IllegalArgumentException("Product with this name already exists");
+        }
+
         Product product = Product.builder()
                 .id(UUID.randomUUID())
                 .name(productRequest.getName())
@@ -169,6 +225,8 @@ public class ProductService {
                 .build();
 
         productList.add(product);
+        log.info("Product added with ID: {}", product.getId());
+
         return product.toResponseDTO();
     }
 
@@ -176,14 +234,24 @@ public class ProductService {
         if (productId == null) {
             throw new IllegalArgumentException("Product ID cannot be null");
         }
-        Product existingProduct = productList.stream().filter(product -> product.getId().equals(productId)).findFirst()
-                .orElseThrow(() -> new ProductNotFound("Product not found with id: " + productId));
-        existingProduct.setName(productRequest.getName());
-        existingProduct.setDescription(productRequest.getDescription());
-        existingProduct.setPrice(productRequest.getPrice());
-        existingProduct.setCategory(productRequest.getCategory());
-        existingProduct.setStock(productRequest.getStock());
+        log.info("Updating product: {}", productId);
 
+        Product existingProduct = productList.stream()
+                .filter(p -> p.getId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> {
+                    log.warn("Product not found for update: {}", productId);
+                    return new ProductNotFound("Product not found with id: " + productId);
+                });
+
+        // Only update non-null fields (partial update support)
+        if (productRequest.getName() != null) existingProduct.setName(productRequest.getName());
+        if (productRequest.getDescription() != null) existingProduct.setDescription(productRequest.getDescription());
+        if (productRequest.getPrice() != null) existingProduct.setPrice(productRequest.getPrice());
+        if (productRequest.getCategory() != null) existingProduct.setCategory(productRequest.getCategory());
+        if (productRequest.getStock() != null) existingProduct.setStock(productRequest.getStock());
+
+        log.info("Product updated: {}", existingProduct.getName());
         return existingProduct.toResponseDTO();
     }
 
