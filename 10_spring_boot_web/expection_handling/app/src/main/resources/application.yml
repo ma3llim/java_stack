@@ -13,3 +13,8 @@ info:
     name: Employee Management System
     version: 1.0
     developer: Sameer
+
+logging:
+  level:
+    root: INFO
+    org.example: DEBUG
