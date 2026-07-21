@@ -1,0 +1,15 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: Employee Management System
+    version: 1.0
+    developer: Sameer
