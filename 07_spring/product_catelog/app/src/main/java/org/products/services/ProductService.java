@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -86,7 +87,7 @@ public class ProductService {
         productList.add(product30);
     }
 
-    public ResponseEntity<PageResponse<ProductResponseDTO>> getProducts(int page, int limit) {
+    public ResponseEntity<PageResponse<ProductResponseDTO>> getProducts(int page, int limit, String sortBy, String direction) {
         if (page < 0) page = 0;
         if (limit < 1) limit = 10;
 
@@ -99,9 +100,13 @@ public class ProductService {
             page = 0;
         }
 
+        if (sortBy == null || sortBy.isBlank()) sortBy = "name";
+        if (direction == null || direction.isBlank()) direction = "asc";
+
         List<ProductResponseDTO> content = productList.stream()
                 .skip(start)
                 .limit(limit)
+                .sorted(getComparator(sortBy, direction))
                 .map(Product::toResponseDTO)
                 .collect(Collectors.toList());
 
@@ -172,5 +177,19 @@ public class ProductService {
         existingProduct.setStock(productRequest.getStock());
 
         return existingProduct.toResponseDTO();
+    }
+
+    private Comparator<Product> getComparator(String sortBy, String direction) {
+        Comparator<Product> comparator = switch (sortBy.toLowerCase()) {
+            case "price" -> Comparator.comparing(Product::getPrice);
+            case "category" -> Comparator.comparing(Product::getCategory);
+            default -> Comparator.comparing(Product::getName);
+        };
+
+        if (direction.equalsIgnoreCase("desc")) {
+            comparator = comparator.reversed();
+        }
+
+        return comparator;
     }
 }

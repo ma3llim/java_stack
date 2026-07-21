@@ -23,8 +23,10 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<PageResponse<ProductResponseDTO>> getAllProduct(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return productService.getProducts(page, size);
+    public ResponseEntity<PageResponse<ProductResponseDTO>> getAllProduct(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy, @RequestParam(required = false) String direction) {
+        return productService.getProducts(page, size, sortBy, direction);
     }
 
     @GetMapping("/{productId}")
