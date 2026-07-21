@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    private List<Product> productList = new ArrayList<>();
+    private final List<Product> productList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -62,7 +62,7 @@ public class ProductService {
     }
 
     public void deleteProductById(UUID productId) throws ProductNotFound {
-        if (productId.toString().isEmpty() || productId == null) {
+        if (productId.toString().isEmpty()) {
             throw new IllegalArgumentException("Product ID is required for deleting");
         }
         Product exisitedProduct = productList.stream().filter(product -> product.getId().equals(productId)).findFirst()
