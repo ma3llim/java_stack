@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.osgi.annotation.versioning.ProviderType;
 import org.products.Dtos.request.ProductRequestDTO;
+import org.products.Dtos.response.PageResponse;
 import org.products.Dtos.response.ProductResponseDTO;
 import org.products.entities.Product;
 import org.products.exceptions.ProductNotFound;
@@ -22,8 +23,8 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> getAllProduct() {
-        return productService.getProducts();
+    public ResponseEntity<PageResponse<ProductResponseDTO>> getAllProduct(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return productService.getProducts(page, size);
     }
 
     @GetMapping("/{productId}")
