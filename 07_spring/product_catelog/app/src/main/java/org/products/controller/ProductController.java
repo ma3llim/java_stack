@@ -25,8 +25,11 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<PageResponse<ProductResponseDTO>> getAllProduct(
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sortBy, @RequestParam(required = false) String direction) {
-        return productService.getProducts(page, size, sortBy, direction);
+            @RequestParam(required = false) String sortBy, @RequestParam(required = false) String direction,
+            @RequestParam(required = false) String search, @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice
+    ) {
+        return productService.getProducts(page, size, sortBy, direction, search, minPrice, maxPrice);
     }
 
     @GetMapping("/{productId}")

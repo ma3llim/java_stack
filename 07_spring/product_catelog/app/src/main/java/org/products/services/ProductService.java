@@ -12,6 +12,7 @@ import org.products.exceptions.ProductNotFound;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -87,15 +88,22 @@ public class ProductService {
         productList.add(product30);
     }
 
-    public ResponseEntity<PageResponse<ProductResponseDTO>> getProducts(int page, int limit, String sortBy, String direction) {
+    public ResponseEntity<PageResponse<ProductResponseDTO>> getProducts(int page, int limit, String sortBy, String direction, String search, Double minPrice, Double maxPrice) {
         if (page < 0) page = 0;
         if (limit < 1) limit = 10;
 
-        int totalElements = productList.size();
+        // FILTER first (all filters optional - null means no filter)
+        List<Product> filtered = productList.stream()
+                .filter(p -> search == null || search.isBlank() || p.getName().toLowerCase().contains(search.toLowerCase()))
+                .filter(p -> minPrice == null || p.getPrice() >= minPrice)
+                .filter(p -> maxPrice == null || p.getPrice() <= maxPrice)
+                .toList();
+
+        int totalElements = filtered.size();
         int totalPages = (int) Math.ceil((double) totalElements / limit);
 
         int start = page * limit;
-        if (start > totalElements) {
+        if (start >= totalElements) {
             start = 0;
             page = 0;
         }
@@ -103,10 +111,10 @@ public class ProductService {
         if (sortBy == null || sortBy.isBlank()) sortBy = "name";
         if (direction == null || direction.isBlank()) direction = "asc";
 
-        List<ProductResponseDTO> content = productList.stream()
+        List<ProductResponseDTO> content = filtered.stream()
+                .sorted(getComparator(sortBy, direction))
                 .skip(start)
                 .limit(limit)
-                .sorted(getComparator(sortBy, direction))
                 .map(Product::toResponseDTO)
                 .collect(Collectors.toList());
 
@@ -180,13 +188,16 @@ public class ProductService {
     }
 
     private Comparator<Product> getComparator(String sortBy, String direction) {
-        Comparator<Product> comparator = switch (sortBy.toLowerCase()) {
+        String field = (sortBy != null) ? sortBy.toLowerCase().trim() : "name";
+        String dir = (direction != null) ? direction.toLowerCase().trim() : "asc";
+
+        Comparator<Product> comparator = switch (field) {
             case "price" -> Comparator.comparing(Product::getPrice);
             case "category" -> Comparator.comparing(Product::getCategory);
             default -> Comparator.comparing(Product::getName);
         };
 
-        if (direction.equalsIgnoreCase("desc")) {
+        if (dir.equals("desc")) {
             comparator = comparator.reversed();
         }
 
