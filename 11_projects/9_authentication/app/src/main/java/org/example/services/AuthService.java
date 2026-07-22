@@ -3,6 +3,7 @@ package org.example.services;
 import lombok.AllArgsConstructor;
 import org.example.dtos.UserDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserDto registerUser(UserDto userDto) {
-        UserDto userDto1 = userService.createUser(userDto);
-        return modelMapper.map(userDto1, UserDto.class);
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userService.createUser(userDto);
     }
+
 }
