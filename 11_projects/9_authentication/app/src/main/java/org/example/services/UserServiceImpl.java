@@ -7,7 +7,6 @@ import org.example.enums.Provider;
 import org.example.exceptions.ResourceNotFoundException;
 import org.example.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
