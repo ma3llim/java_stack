@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.dtos.LoginRequest;
 import org.example.dtos.TokenResponse;
 import org.example.dtos.UserDto;
+import org.example.entities.RefreshToken;
 import org.example.entities.User;
 import org.example.repositories.UserRepository;
 import org.example.security.JwtService;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+import java.util.UUID;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/auth")
@@ -41,29 +45,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticate(loginRequest);
-        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new BadCredentialsException("User Not Found By This Email Id " + loginRequest.getEmail()));
-        if (!user.isEnabled()) {
-            throw new DisabledException("User is disabled");
-        }
-
-        // generate token
-        String accessToken = jwtService.generateAccessToken(user);
-        TokenResponse tokenResponse = TokenResponse.builder()
-                .accessToken(accessToken)
-                .expiresIn(jwtProperties.getAccessTtlSeconds())
-                .tokenType("accessToken")
-                .userDto(modelMapper.map(user, UserDto.class)).build();
-
-        return ResponseEntity.ok(tokenResponse);
-    }
-
-    private Authentication authenticate(LoginRequest loginRequest) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username or password");
-        }
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(authService.loginUser(loginRequest));
     }
 }
