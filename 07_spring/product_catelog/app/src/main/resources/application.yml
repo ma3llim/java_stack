@@ -7,3 +7,11 @@ app:
   service:
     name: product-catalog
     version: 1.0.0
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+  swagger-ui:
+    path: /swagger
+    url: /api-docs
