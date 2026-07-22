@@ -55,21 +55,15 @@ public class JwtService {
 
     // Parse the token
     public Jws<Claims> parse(String token) {
-        try {
-            return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
-        } catch (JwtException e) {
-            throw new RuntimeException(e);
-        }
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
     }
 
-    public boolean isAccessToken(String token) {
-        Claims claims = parse(token).getPayload();
-        return "access".equals(claims.get("type"));
+    public boolean isAccessToken(Claims claims) {
+        return "access".equals(claims.get("type", String.class));
     }
 
-    public boolean isRefreshToken(String token) {
-        Claims claims = parse(token).getPayload();
-        return "refresh".equals(claims.get("type"));
+    public boolean isRefreshToken(Claims claims) {
+        return "refresh".equals(claims.get("type", String.class));
     }
 
     public UUID getUserId(String token) {
