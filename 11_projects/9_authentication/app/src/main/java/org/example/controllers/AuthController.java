@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.example.dtos.LoginRequest;
 import org.example.dtos.TokenResponse;
@@ -24,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.loginUser(loginRequest));
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        return ResponseEntity.status(HttpStatus.OK).body(authService.loginUser(loginRequest, response));
     }
 }

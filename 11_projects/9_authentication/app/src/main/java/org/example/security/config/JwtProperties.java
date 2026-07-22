@@ -29,28 +29,4 @@ public class JwtProperties {
 
     @Min(value = 300, message = "Refresh token TTL must be at least 300 seconds")
     private long refreshTtlSeconds;
-
-    @Valid
-    private Cookie cookie = new Cookie();
-
-    @Getter
-    @Setter
-    public static class Cookie {
-
-        private boolean secure;
-
-        private boolean httpOnly;
-
-        @NotBlank(message = "SameSite policy must not be blank")
-        @Pattern(
-                regexp = "Strict|Lax|None",
-                message = "SameSite must be one of: Strict, Lax, None"
-        )
-        private String sameSite;
-
-        @AssertTrue(message = "SameSite=None requires Secure=true")
-        public boolean isSameSiteConfigurationValid() {
-            return !"None".equalsIgnoreCase(sameSite) || secure;
-        }
-    }
 }

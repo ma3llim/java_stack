@@ -1,5 +1,6 @@
 package org.example.services;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.example.dtos.LoginRequest;
 import org.example.dtos.TokenResponse;
@@ -8,7 +9,9 @@ import org.example.entities.RefreshToken;
 import org.example.entities.User;
 import org.example.repositories.RefreshTokenRepository;
 import org.example.repositories.UserRepository;
+import org.example.security.CookieService;
 import org.example.security.JwtService;
+import org.example.security.config.CookieProperties;
 import org.example.security.config.JwtProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +39,14 @@ public class AuthService {
     private final JwtService jwtService;
     private final JwtProperties jwtProperties;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CookieService cookieService;
 
     public UserDto registerUser(UserDto userDto) {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userService.createUser(userDto);
     }
 
-    public TokenResponse loginUser(LoginRequest loginRequest) {
+    public TokenResponse loginUser(LoginRequest loginRequest, HttpServletResponse response) {
         Authentication authentication = authenticate(loginRequest);
         User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new BadCredentialsException("User Not Found By This Email Id " + loginRequest.getEmail()));
         if (!user.isEnabled()) {
@@ -66,6 +70,10 @@ public class AuthService {
         // generate token access and refresh
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user, refreshTokenObj.getJti());
+
+        // attach token to cookies
+        cookieService.attachRefreshCookie(response, refreshToken, (int) jwtProperties.getRefreshTtlSeconds());
+        cookieService.addNoStoreHeaders(response);
 
         return TokenResponse.builder()
                 .accessToken(accessToken)

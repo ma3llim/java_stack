@@ -12,7 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "refresh_tokens", indexes = {
         @Index(name = "refresh_tokens_jti_idx", columnList = "jti", unique = true),
-        @Index(name = "refresh_token_user_id_idx", columnList = "user_id", unique = true)
+        @Index(name = "refresh_token_user_id_idx", columnList = "user_id")
 })
 @Data
 @NoArgsConstructor
