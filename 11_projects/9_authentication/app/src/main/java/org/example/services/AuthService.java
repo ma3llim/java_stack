@@ -6,6 +6,7 @@ import org.example.dtos.TokenResponse;
 import org.example.dtos.UserDto;
 import org.example.entities.RefreshToken;
 import org.example.entities.User;
+import org.example.repositories.RefreshTokenRepository;
 import org.example.repositories.UserRepository;
 import org.example.security.JwtService;
 import org.example.security.config.JwtProperties;
@@ -34,6 +35,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final JwtProperties jwtProperties;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public UserDto registerUser(UserDto userDto) {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -47,11 +49,27 @@ public class AuthService {
             throw new DisabledException("User is disabled");
         }
 
-        // generate token
+        // create response token object
+        String jti = UUID.randomUUID().toString();
+        var refreshTokenObj = RefreshToken.builder()
+                .jti(jti)
+                .user(user)
+                .createdAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds(jwtProperties.getRefreshTtlSeconds()))
+                .revoked(false)
+                .replacedByToken("")
+                .build();
+
+        // refresh token information save
+        refreshTokenRepository.save(refreshTokenObj);
+
+        // generate token access and refresh
         String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user, refreshTokenObj.getJti());
 
         return TokenResponse.builder()
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .expiresIn(jwtProperties.getAccessTtlSeconds())
                 .tokenType("accessToken")
                 .userDto(modelMapper.map(user, UserDto.class)).build();
