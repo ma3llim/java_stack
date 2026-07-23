@@ -7,15 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.products.Dtos.request.ProductRequestDTO;
 import org.products.Dtos.response.PageResponse;
 import org.products.Dtos.response.ProductResponseDTO;
-import org.products.config.AppProperties;
-import org.products.config.PaginationProperties;
+import org.products.config.properties.PaginationProperties;
 import org.products.entities.Product;
 import org.products.enums.Category;
 import org.products.exceptions.ProductNotFound;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

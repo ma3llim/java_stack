@@ -15,3 +15,10 @@ springdoc:
   swagger-ui:
     path: /swagger
     url: /api-docs
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    issuer: ${JWT_ISSUER}
+    access-ttl-seconds: ${ACCESS_TTL_SECONDS}
+    refresh-ttl-seconds: ${REFRESH_TTL_SECONDS}
