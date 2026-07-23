@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 @Getter
 @Setter
 @Validated
-@ConfigurationProperties(prefix = "security.jwt")
+@ConfigurationProperties(prefix = "app.jwt")
 public class JwtProperties {
     @NotBlank(message = "JWT secret must not be blank")
     @Size(min = 32, message = "JWT secret must be at least 32 characters long")

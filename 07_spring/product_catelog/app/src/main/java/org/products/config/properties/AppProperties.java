@@ -12,4 +12,7 @@ public class AppProperties {
 
     @NestedConfigurationProperty
     private ServiceProperties service = new ServiceProperties();
+
+    @NestedConfigurationProperty
+    private JwtProperties jwtProperties = new JwtProperties();
 }

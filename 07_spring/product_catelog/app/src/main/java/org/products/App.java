@@ -6,6 +6,7 @@ package org.products;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.products.config.properties.AppProperties;
+import org.products.config.properties.JwtProperties;
 import org.products.config.properties.PaginationProperties;
 import org.products.config.properties.ServiceProperties;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +17,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties({
         AppProperties.class,
         PaginationProperties.class,
-        ServiceProperties.class
+        ServiceProperties.class,
+        JwtProperties.class
 })
 @OpenAPIDefinition(
         info = @Info(
