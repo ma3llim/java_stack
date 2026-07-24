@@ -1,9 +1,9 @@
 # Product Catalog
 
-Simple Spring-based Product Catalog service.
+Simple Spring Boot-based Product Catalog service.
 
 ## Overview
-This project implements a product catalog API using Spring (Spring Boot assumed). It provides endpoints to create, read, update and delete product records and includes integration with a database for persistence.
+This project implements a product catalog API using Spring Boot. It provides endpoints to create, read, update and delete product records and persists data via configurable datasources.
 
 ## Features
 - RESTful API for products (CRUD)
@@ -12,50 +12,67 @@ This project implements a product catalog API using Spring (Spring Boot assumed)
 - Configurable datasource (H2 / PostgreSQL / MySQL)
 
 ## Prerequisites
-- Java 11+ (or project-targeted JDK)
-- Maven or Gradle (or use bundled wrapper)
-- Optional: Docker (for containerized DB)
+- Java 11+
+- Gradle (use the included Gradle wrapper)
 
-## Build
+## Build (Gradle)
 
-Using Maven:
-```bash
-mvn clean package
-```
-If the repo includes the Maven wrapper on Windows:
+Using the Gradle wrapper (recommended):
+
+Windows:
 ```powershell
-.\mvnw.cmd clean package
+.\gradlew.bat clean build
 ```
 
-Using Gradle:
+Unix/macOS:
 ```bash
-./gradlew build
+./gradlew clean build
 ```
-On Windows:
-```powershell
-.\gradlew.bat build
+
+If you have Gradle installed:
+```bash
+gradle clean build
 ```
+
+Built artifacts will be in `build/libs/`.
 
 ## Run
 
-Using Spring Boot:
+Run with the Gradle bootRun task:
+
+Windows:
 ```powershell
-mvn spring-boot:run
-# or
-.\mvnw.cmd spring-boot:run
+.\gradlew.bat bootRun
+```
+
+Unix/macOS:
+```bash
+./gradlew bootRun
 ```
 
 Run the built JAR:
+
+Windows:
 ```powershell
-java -jar target\<artifactId>-<version>.jar
+java -jar build\libs\<project-name>-<version>.jar
+```
+
+Unix/macOS:
+```bash
+java -jar build/libs/<project-name>-<version>.jar
 ```
 
 ## Tests
-Run unit and integration tests:
+Run tests with Gradle:
+
+Windows:
 ```powershell
-mvn test
-# or
-.\mvnw.cmd test
+.\gradlew.bat test
+```
+
+Unix/macOS:
+```bash
+./gradlew test
 ```
 
 ## Configuration
@@ -64,7 +81,7 @@ Application configuration lives in `src/main/resources/application.properties` o
 - spring.datasource.url / username / password
 - spring.jpa.hibernate.ddl-auto
 
-For quick local development use H2 in-memory DB:
+Example H2 for local development:
 ```properties
 spring.datasource.url=jdbc:h2:mem:productdb
 spring.datasource.driverClassName=org.h2.Driver
@@ -77,28 +94,3 @@ spring.jpa.hibernate.ddl-auto=update
 - POST /api/products — create product
 - PUT /api/products/{id} — update product
 - DELETE /api/products/{id} — delete product
-
-Adjust base path according to your controller mappings.
-
-## Development (VS Code)
-- Open folder `f:\java\07_spring\product_catelog` in VS Code.
-- Install Java and Spring extensions.
-- Use the Debug view to run the Spring Boot application or use the integrated terminal to run Maven/Gradle commands.
-
-## Docker (optional)
-Example Dockerfile steps:
-- Build jar: `mvn package`
-- Build image: `docker build -t product-catalog .`
-- Run container: `docker run -p 8080:8080 product-catalog`
-
-## Contributing
-- Fork, create a feature branch, open a PR.
-- Run tests locally before submitting.
-
-## Troubleshooting
-- Check logs in VS Code Output / terminal.
-- If port already in use, change `server.port`.
-- Database connection errors: verify datasource URL/credentials and that DB is reachable.
-
-## License
-Specify project license in LICENSE file.
