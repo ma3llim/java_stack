@@ -1,22 +1,29 @@
 package org.products.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 import org.products.Dtos.request.ProductRequestDTO;
 import org.products.Dtos.response.ProductResponseDTO;
 
 import java.util.UUID;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String description;
     private Double price;
     private String category;
-    private double stock;
+    private Double stock;
 
     // Convert from Request DTO to Entity
     public static Product fromRequestDTO(ProductRequestDTO requestDTO) {

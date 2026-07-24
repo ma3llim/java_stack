@@ -4,14 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-
 @Component
 @RequiredArgsConstructor
-public class SecurityUtils {
+public class SecurityUtil {
     private final PasswordEncoder passwordEncoder;
 
     public String encodePassword(String password) {

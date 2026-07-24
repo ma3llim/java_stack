@@ -17,8 +17,8 @@ import org.products.exceptions.CustomException;
 import org.products.repository.RefreshTokenRepository;
 import org.products.repository.UserRepository;
 import org.products.utils.JwtUtil;
-import org.products.utils.RequestUtils;
-import org.products.utils.SecurityUtils;
+import org.products.utils.RequestUtil;
+import org.products.utils.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,7 +36,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtUtil jwtUtil;
-    private final SecurityUtils securityUtils;
+    private final SecurityUtil securityUtil;
 
 
     public ApiResponse<?> registerUser(RequestDto user, HttpServletRequest request) {
@@ -47,7 +47,7 @@ public class AuthService {
         }
 
         // hashing the password
-        String hashedPassword = securityUtils.encodePassword(user.getPassword());
+        String hashedPassword = securityUtil.encodePassword(user.getPassword());
         User newUser = User.builder()
                 .fullName(user.getFullName())
                 .email(user.getEmail())
@@ -61,8 +61,8 @@ public class AuthService {
         // generate tokens
         TokenPair tokenPair = jwtUtil.generateToken(newUser);
 
-        String ipAddress = RequestUtils.getClientIpAddress(request);
-        String userAgent = RequestUtils.getUserAgent(request);
+        String ipAddress = RequestUtil.getClientIpAddress(request);
+        String userAgent = RequestUtil.getUserAgent(request);
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .userId(newUser.getId())
@@ -96,7 +96,7 @@ public class AuthService {
             throw new CustomException("Account is disabled", HttpStatus.FORBIDDEN);
         }
 
-        if (!securityUtils.checkPassword(user.getPassword(), existingUser.getPassword())) {
+        if (!securityUtil.checkPassword(user.getPassword(), existingUser.getPassword())) {
             throw new CustomException("Invalid username or password", HttpStatus.NOT_FOUND);
         }
 
