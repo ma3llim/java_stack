@@ -54,13 +54,15 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Add new product")
     @PostMapping
     public ApiResponse<ProductResponseDTO> addProduct(@RequestBody ProductRequestDTO productRequest) {
         ProductResponseDTO product = productService.addProduct(productRequest);
         return ApiResponse.success(product, "Product Added Successfully");
     }
-
+    
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update the product by id")
     @PutMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID productId, @Valid @RequestBody ProductRequestDTO productRequest) throws ProductNotFound {
