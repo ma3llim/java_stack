@@ -118,7 +118,9 @@ public class ProductService {
 
     public ProductResponseDTO addProduct(ProductRequestDTO productRequest) {
         log.info("Adding new product: {}", productRequest.getName());
-
+        if (productRequest.getName() == null) {
+            throw new IllegalArgumentException("Product request cannot be null");
+        }
         // Optional: Check for duplicate name
         boolean exists = productRepository.existsByNameIgnoreCase(productRequest.getName());
         if (exists) {
