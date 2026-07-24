@@ -1,6 +1,5 @@
 package org.products.services;
 
-import com.sun.source.tree.BreakTree;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,6 @@ import org.products.Dtos.response.PageResponse;
 import org.products.Dtos.response.ProductResponseDTO;
 import org.products.config.properties.PaginationProperties;
 import org.products.entities.Product;
-import org.products.enums.Category;
 import org.products.exceptions.ProductNotFound;
 import org.products.repository.ProductRepository;
 import org.products.utils.ProductSpecificationUtil;
@@ -18,9 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import tools.jackson.core.PrettyPrinter;
 
 import java.util.*;
 import java.util.stream.Collectors;
