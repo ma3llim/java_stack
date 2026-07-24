@@ -15,4 +15,7 @@ public class AppProperties {
 
     @NestedConfigurationProperty
     private JwtProperties jwtProperties = new JwtProperties();
+
+    @NestedConfigurationProperty
+    private CorsProperties corsProperties = new CorsProperties();
 }

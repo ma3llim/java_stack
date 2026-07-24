@@ -27,6 +27,18 @@ app:
     access-ttl-seconds: ${ACCESS_TTL_SECONDS:3600}
     refresh-ttl-seconds: ${REFRESH_TTL_SECONDS:86400}
 
+  cors:
+    allowed-origins: http://localhost:3000
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    allowed-headers:
+      - "*"
+    allowed-credentials: true
+    max-age: 3600
+
 springdoc:
   api-docs:
     path: /api-docs
