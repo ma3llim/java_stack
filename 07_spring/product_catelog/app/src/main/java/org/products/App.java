@@ -3,8 +3,6 @@
  */
 package org.products;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
 import org.products.config.properties.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,13 +16,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
         JwtProperties.class,
         CorsProperties.class
 })
-@OpenAPIDefinition(
-        info = @Info(
-                title = "Product API",
-                version = "1.0",
-                description = "Product System APIs"
-        )
-)
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);

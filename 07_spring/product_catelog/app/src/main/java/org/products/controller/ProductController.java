@@ -1,6 +1,7 @@
 package org.products.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.products.Dtos.request.ProductRequestDTO;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
+@Tag(name = "Products", description = "Operations related to product management")
 public class ProductController {
     private final ProductService productService;
 
@@ -61,7 +63,7 @@ public class ProductController {
         ProductResponseDTO product = productService.addProduct(productRequest);
         return ApiResponse.success(product, "Product Added Successfully");
     }
-    
+
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update the product by id")
     @PutMapping("/{productId}")
