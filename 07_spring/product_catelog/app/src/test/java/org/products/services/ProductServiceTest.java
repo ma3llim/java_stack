@@ -1,6 +1,7 @@
 package org.products.services;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,8 +11,10 @@ import org.products.Dtos.request.ProductRequestDTO;
 import org.products.Dtos.response.ProductResponseDTO;
 import org.products.config.properties.PaginationProperties;
 import org.products.entities.Product;
+import org.products.exceptions.ProductNotFound;
 import org.products.repository.ProductRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -55,6 +58,7 @@ public class ProductServiceTest {
 
     // CREATE PRODUCT TESTS
     @Test
+    @DisplayName("Should successfully create product when valid request is provided")
     void addProduct_ShouldSuccessfullyCreateProduct_WhenValidRequest() {
         // Arrange
         when(productRepository.existsByNameIgnoreCase(validProductRequest.getName())).thenReturn(false);
@@ -84,6 +88,7 @@ public class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when product name already exists")
     void addProduct_ShouldThrowException_WhenProductNameAlreadyExists() {
         // Arrange
         when(productRepository.existsByNameIgnoreCase(validProductRequest.getName()))
@@ -99,6 +104,7 @@ public class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when product name is null")
     void addProduct_ShouldThrowException_WhenProductNameIsNull() {
         // Arrange
         ProductRequestDTO invalidRequest = ProductRequestDTO.builder()
@@ -117,6 +123,7 @@ public class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("Should ignore case when checking for duplicate product names")
     void addProduct_ShouldTrimAndNormalizeName_WhenCheckingDuplicates() {
         // Arrange
         ProductRequestDTO requestWithSpaces = ProductRequestDTO.builder()
@@ -140,4 +147,124 @@ public class ProductServiceTest {
         // Assert
         verify(productRepository).existsByNameIgnoreCase("  Test Product  ");
     }
+
+    // GET PRODUCT BY ID TESTS
+    @Test
+    @DisplayName("Should return product when product exists")
+    void getProductById_ShouldReturnProduct_WhenProductExists() throws ProductNotFound {
+        // Arrange
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+
+        // Act
+        ProductResponseDTO result = productService.getProductById(productId);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(productId);
+        assertThat(result.getName()).isEqualTo("Test Product");
+        assertThat(result.getDescription()).isEqualTo("Test Description");
+        assertThat(result.getPrice()).isEqualTo(99.99);
+        assertThat(result.getCategory()).isEqualTo("Electronics");
+        assertThat(result.getStock()).isEqualTo(10);
+
+        verify(productRepository).findById(productId);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should throw ProductNotFound when product does not exist")
+    void getProductById_ShouldThrowProductNotFound_WhenProductDoesNotExist() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        when(productRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.getProductById(nonExistentId))
+                .isInstanceOf(ProductNotFound.class)
+                .hasMessage("Product Not Found of this product ID: " + nonExistentId);
+
+        verify(productRepository).findById(nonExistentId);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should throw ProductNotFound when product ID is null")
+    void getProductById_ShouldThrowProductNotFound_WhenProductIdIsNull() {
+        // Act & Assert
+        assertThatThrownBy(() -> productService.getProductById(null))
+                .isInstanceOf(ProductNotFound.class)
+                .hasMessage("Product Not Found of this product ID: null");
+
+        verify(productRepository).findById(null);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should return correct product when multiple products exist")
+    void getProductById_ShouldReturnCorrectProduct_WhenMultipleProductsExist() throws ProductNotFound {
+        // Arrange
+        UUID anotherProductId = UUID.randomUUID();
+        Product anotherProduct = Product.builder()
+                .id(anotherProductId)
+                .name("Another Product")
+                .description("Another Description")
+                .price(49.99)
+                .category("Books")
+                .stock(5.0)
+                .build();
+
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        when(productRepository.findById(anotherProductId))
+                .thenReturn(Optional.of(anotherProduct));
+
+        // Act
+        ProductResponseDTO result1 = productService.getProductById(productId);
+        ProductResponseDTO result2 = productService.getProductById(anotherProductId);
+
+        // Assert
+        assertThat(result1.getId()).isEqualTo(productId);
+        assertThat(result1.getName()).isEqualTo("Test Product");
+
+        assertThat(result2.getId()).isEqualTo(anotherProductId);
+        assertThat(result2.getName()).isEqualTo("Another Product");
+        assertThat(result2.getPrice()).isEqualTo(49.99);
+
+        verify(productRepository).findById(productId);
+        verify(productRepository).findById(anotherProductId);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should return product with all fields populated")
+    void getProductById_ShouldReturnProductWithAllFields_WhenProductHasAllFieldsPopulated() throws ProductNotFound {
+        // Arrange
+        Product fullProduct = Product.builder()
+                .id(productId)
+                .name("Full Product")
+                .description("Full Description with details")
+                .price(199.99)
+                .category("Premium Electronics")
+                .stock(25.0)
+                .build();
+
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(fullProduct));
+
+        // Act
+        ProductResponseDTO result = productService.getProductById(productId);
+
+        // Assert
+        assertThat(result.getId()).isEqualTo(productId);
+        assertThat(result.getName()).isEqualTo("Full Product");
+        assertThat(result.getDescription()).isEqualTo("Full Description with details");
+        assertThat(result.getPrice()).isEqualTo(199.99);
+        assertThat(result.getCategory()).isEqualTo("Premium Electronics");
+        assertThat(result.getStock()).isEqualTo(25);
+
+        verify(productRepository).findById(productId);
+    }
+
 }
