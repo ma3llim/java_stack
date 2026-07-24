@@ -267,4 +267,258 @@ public class ProductServiceTest {
         verify(productRepository).findById(productId);
     }
 
+    // Update
+    // ========== UPDATE PRODUCT TESTS ==========
+
+    @Test
+    @DisplayName("Should successfully update product when valid request is provided")
+    void updateProduct_ShouldSuccessfullyUpdateProduct_WhenValidRequest() throws ProductNotFound {
+        // Arrange
+        ProductRequestDTO updateRequest = ProductRequestDTO.builder()
+                .name("Updated Product")
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        Product updatedProduct = Product.builder()
+                .id(productId)
+                .name("Updated Product")
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        when(productRepository.findByNameIgnoreCase("Updated Product"))
+                .thenReturn(Optional.empty());
+        when(productRepository.save(any(Product.class)))
+                .thenReturn(updatedProduct);
+
+        // Act
+        ProductResponseDTO result = productService.updateProduct(productId, updateRequest);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(productId);
+        assertThat(result.getName()).isEqualTo("Updated Product");
+        assertThat(result.getDescription()).isEqualTo("Updated Description");
+        assertThat(result.getPrice()).isEqualTo(149.99);
+        assertThat(result.getCategory()).isEqualTo("Updated Category");
+        assertThat(result.getStock()).isEqualTo(20);
+
+        verify(productRepository).findById(productId);
+        verify(productRepository).findByNameIgnoreCase("Updated Product");
+        verify(productRepository).save(any(Product.class));
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should throw ProductNotFound when updating non-existent product")
+    void updateProduct_ShouldThrowProductNotFound_WhenProductDoesNotExist() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        ProductRequestDTO updateRequest = ProductRequestDTO.builder()
+                .name("Updated Product")
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        when(productRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.updateProduct(nonExistentId, updateRequest))
+                .isInstanceOf(ProductNotFound.class)
+                .hasMessage("Product not found with id: " + nonExistentId);
+
+        verify(productRepository).findById(nonExistentId);
+        verify(productRepository, never()).findByNameIgnoreCase(any());
+        verify(productRepository, never()).save(any(Product.class));
+    }
+
+    @Test
+    @DisplayName("Should throw exception when updating with duplicate product name")
+    void updateProduct_ShouldThrowException_WhenDuplicateProductName() throws ProductNotFound {
+        // Arrange
+        UUID anotherProductId = UUID.randomUUID();
+        Product anotherProduct = Product.builder()
+                .id(anotherProductId)
+                .name("Another Product")
+                .description("Another Description")
+                .price(49.99)
+                .category("Books")
+                .stock(5.0)
+                .build();
+
+        ProductRequestDTO updateRequest = ProductRequestDTO.builder()
+                .name("Another Product") // Trying to update to this name
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        when(productRepository.findByNameIgnoreCase("Another Product"))
+                .thenReturn(Optional.of(anotherProduct));
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.updateProduct(productId, updateRequest))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product with this name already exists");
+
+        verify(productRepository).findById(productId);
+        verify(productRepository).findByNameIgnoreCase("Another Product");
+        verify(productRepository, never()).save(any(Product.class));
+    }
+
+    @Test
+    @DisplayName("Should allow updating with same name (no duplicate check triggered)")
+    void updateProduct_ShouldAllowUpdate_WhenSameName() throws ProductNotFound {
+        // Arrange
+        ProductRequestDTO updateRequest = ProductRequestDTO.builder()
+                .name("Test Product") // Same name
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        Product updatedProduct = Product.builder()
+                .id(productId)
+                .name("Test Product") // Same name
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        // Since name is same, findByNameIgnoreCase should not be called
+        when(productRepository.save(any(Product.class)))
+                .thenReturn(updatedProduct);
+
+        // Act
+        ProductResponseDTO result = productService.updateProduct(productId, updateRequest);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo("Test Product");
+        assertThat(result.getDescription()).isEqualTo("Updated Description");
+        assertThat(result.getPrice()).isEqualTo(149.99);
+
+        verify(productRepository).findById(productId);
+        verify(productRepository, never()).findByNameIgnoreCase(any());
+        verify(productRepository).save(any(Product.class));
+    }
+
+    @Test
+    @DisplayName("Should partially update product when only some fields are provided")
+    void updateProduct_ShouldPartiallyUpdateProduct_WhenSomeFieldsProvided() throws ProductNotFound {
+        // Arrange
+        ProductRequestDTO partialUpdateRequest = ProductRequestDTO.builder()
+                .name("Partially Updated Product")
+                .price(199.99)
+                .build();
+
+        Product partiallyUpdatedProduct = Product.builder()
+                .id(productId)
+                .name("Partially Updated Product")
+                .description("Test Description") // Unchanged
+                .price(199.99)
+                .category("Electronics") // Unchanged
+                .stock(10.0) // Unchanged
+                .build();
+
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        when(productRepository.findByNameIgnoreCase("Partially Updated Product"))
+                .thenReturn(Optional.empty());
+        when(productRepository.save(any(Product.class)))
+                .thenReturn(partiallyUpdatedProduct);
+
+        // Act
+        ProductResponseDTO result = productService.updateProduct(productId, partialUpdateRequest);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(productId);
+        assertThat(result.getName()).isEqualTo("Partially Updated Product");
+        assertThat(result.getDescription()).isEqualTo("Test Description"); // Unchanged
+        assertThat(result.getPrice()).isEqualTo(199.99);
+        assertThat(result.getCategory()).isEqualTo("Electronics"); // Unchanged
+        assertThat(result.getStock()).isEqualTo(10); // Unchanged
+
+        verify(productRepository).findById(productId);
+        verify(productRepository).findByNameIgnoreCase("Partially Updated Product");
+        verify(productRepository).save(any(Product.class));
+    }
+
+    @Test
+    @DisplayName("Should throw exception when product ID is null")
+    void updateProduct_ShouldThrowException_WhenProductIdIsNull() {
+        // Arrange
+        ProductRequestDTO updateRequest = ProductRequestDTO.builder()
+                .name("Updated Product")
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.updateProduct(null, updateRequest))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product ID cannot be null");
+
+        verifyNoInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should update product with trimmed name")
+    void updateProduct_ShouldTrimProductName_WhenSaving() throws ProductNotFound {
+        // Arrange
+        ProductRequestDTO updateRequest = ProductRequestDTO.builder()
+                .name("  Trimmed Product Name  ")
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        Product updatedProduct = Product.builder()
+                .id(productId)
+                .name("Trimmed Product Name") // Trimmed
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        when(productRepository.findByNameIgnoreCase("Trimmed Product Name"))
+                .thenReturn(Optional.empty());
+        when(productRepository.save(any(Product.class)))
+                .thenAnswer(invocation -> {
+                    Product saved = invocation.getArgument(0);
+                    saved.setId(productId);
+                    return saved;
+                });
+
+        // Act
+        ProductResponseDTO result = productService.updateProduct(productId, updateRequest);
+
+        // Assert
+        assertThat(result.getName()).isEqualTo("Trimmed Product Name");
+        verify(productRepository).findByNameIgnoreCase("Trimmed Product Name");
+    }
 }

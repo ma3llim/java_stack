@@ -153,11 +153,10 @@ public class ProductService {
             return new ProductNotFound("Product not found with id: " + productId);
         });
 
-        if (!existingProduct.getName().equalsIgnoreCase(productRequest.getName())) {
-            Optional<Product> duplicateProduct = productRepository.findByNameIgnoreCase(
-                    productRequest.getName()
-            );
+        String newName = productRequest.getName() != null ? productRequest.getName().trim() : null;
 
+        if (newName != null && !existingProduct.getName().equalsIgnoreCase(newName)) {
+            Optional<Product> duplicateProduct = productRepository.findByNameIgnoreCase(newName);
             if (duplicateProduct.isPresent()) {
                 log.warn("Product with name '{}' already exists", productRequest.getName());
                 throw new IllegalArgumentException("Product with this name already exists");
@@ -165,7 +164,7 @@ public class ProductService {
         }
 
         // Only update non-null fields (partial update support)
-        if (productRequest.getName() != null) existingProduct.setName(productRequest.getName());
+        if (productRequest.getName() != null) existingProduct.setName(newName);
         if (productRequest.getDescription() != null) existingProduct.setDescription(productRequest.getDescription());
         if (productRequest.getPrice() != null) existingProduct.setPrice(productRequest.getPrice());
         if (productRequest.getCategory() != null) existingProduct.setCategory(productRequest.getCategory());
