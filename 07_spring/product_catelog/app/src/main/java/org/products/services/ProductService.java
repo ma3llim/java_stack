@@ -107,6 +107,10 @@ public class ProductService {
     }
 
     public void deleteProductById(UUID productId) throws ProductNotFound {
+        if (productId == null) {
+            throw new IllegalArgumentException("Product ID is required for deleting");
+        }
+        
         if (productId.toString().isEmpty()) {
             throw new IllegalArgumentException("Product ID is required for deleting");
         }

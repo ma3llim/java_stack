@@ -521,4 +521,98 @@ public class ProductServiceTest {
         assertThat(result.getName()).isEqualTo("Trimmed Product Name");
         verify(productRepository).findByNameIgnoreCase("Trimmed Product Name");
     }
+
+    // Delete
+    @Test
+    @DisplayName("Should successfully delete product when product exists")
+    void deleteProductById_ShouldSuccessfullyDeleteProduct_WhenProductExists() throws ProductNotFound {
+        // Arrange
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        doNothing().when(productRepository).delete(product);
+
+        // Act
+        productService.deleteProductById(productId);
+
+        // Assert
+        verify(productRepository).findById(productId);
+        verify(productRepository).delete(product);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should throw ProductNotFound when deleting non-existent product")
+    void deleteProductById_ShouldThrowProductNotFound_WhenProductDoesNotExist() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        when(productRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.deleteProductById(nonExistentId))
+                .isInstanceOf(ProductNotFound.class)
+                .hasMessage("Product Not Found of this product ID: " + nonExistentId);
+
+        verify(productRepository).findById(nonExistentId);
+        verify(productRepository, never()).delete(any(Product.class));
+    }
+
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when product ID is null")
+    void deleteProductById_ShouldThrowIllegalArgumentException_WhenProductIdIsNull() {
+        // Act & Assert
+        assertThatThrownBy(() -> productService.deleteProductById(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product ID is required for deleting");
+
+        verifyNoInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should delete product and not throw exception when product exists")
+    void deleteProductById_ShouldNotThrowException_WhenProductExists() throws ProductNotFound {
+        // Arrange
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        doNothing().when(productRepository).delete(product);
+
+        // Act & Assert - Should not throw any exception
+        productService.deleteProductById(productId);
+
+        verify(productRepository).findById(productId);
+        verify(productRepository).delete(product);
+    }
+
+    @Test
+    @DisplayName("Should call delete on repository exactly once when product exists")
+    void deleteProductById_ShouldCallDeleteExactlyOnce_WhenProductExists() throws ProductNotFound {
+        // Arrange
+        when(productRepository.findById(productId))
+                .thenReturn(Optional.of(product));
+        doNothing().when(productRepository).delete(product);
+
+        // Act
+        productService.deleteProductById(productId);
+
+        // Assert
+        verify(productRepository, times(1)).findById(productId);
+        verify(productRepository, times(1)).delete(product);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    @DisplayName("Should not call delete when product does not exist")
+    void deleteProductById_ShouldNotCallDelete_WhenProductDoesNotExist() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        when(productRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.deleteProductById(nonExistentId))
+                .isInstanceOf(ProductNotFound.class);
+
+        verify(productRepository).findById(nonExistentId);
+        verify(productRepository, never()).delete(any(Product.class));
+    }
 }
