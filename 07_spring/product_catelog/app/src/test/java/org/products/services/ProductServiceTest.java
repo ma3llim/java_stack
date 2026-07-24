@@ -615,4 +615,61 @@ public class ProductServiceTest {
         verify(productRepository).findById(nonExistentId);
         verify(productRepository, never()).delete(any(Product.class));
     }
+
+    // ========== NOT FOUND EXCEPTION TESTS ==========
+    @Test
+    @DisplayName("Should throw ProductNotFound with correct message when product not found")
+    void productNotFound_ShouldHaveCorrectErrorMessage() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        when(productRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.getProductById(nonExistentId))
+                .isInstanceOf(ProductNotFound.class)
+                .hasMessage("Product Not Found of this product ID: " + nonExistentId)
+                .hasMessageContaining(nonExistentId.toString())
+                .hasMessageContaining("Product Not Found");
+    }
+
+    @Test
+    @DisplayName("Should throw ProductNotFound with correct message when updating non-existent product")
+    void updateProduct_ShouldThrowProductNotFound_WithCorrectErrorMessage() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        ProductRequestDTO updateRequest = ProductRequestDTO.builder()
+                .name("Updated Product")
+                .description("Updated Description")
+                .price(149.99)
+                .category("Updated Category")
+                .stock(20.0)
+                .build();
+
+        when(productRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.updateProduct(nonExistentId, updateRequest))
+                .isInstanceOf(ProductNotFound.class)
+                .hasMessage("Product not found with id: " + nonExistentId)
+                .hasMessageContaining(nonExistentId.toString())
+                .hasMessageContaining("not found");
+    }
+
+    @Test
+    @DisplayName("Should throw ProductNotFound with correct message when deleting non-existent product")
+    void deleteProductById_ShouldThrowProductNotFound_WithCorrectErrorMessage() {
+        // Arrange
+        UUID nonExistentId = UUID.randomUUID();
+        when(productRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.deleteProductById(nonExistentId))
+                .isInstanceOf(ProductNotFound.class)
+                .hasMessage("Product Not Found of this product ID: " + nonExistentId)
+                .hasMessageContaining(nonExistentId.toString())
+                .hasMessageContaining("Product Not Found");
+    }
 }
