@@ -1,5 +1,6 @@
 package org.products.Dtos.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -9,13 +10,12 @@ import java.util.List;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     private Boolean success;
     private String message;
     private T data;
-    @Builder.Default
-    private List<String> errors = null;
-
+    private List<String> errors;
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
     private String path;
@@ -30,7 +30,7 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> error(String message, List<String> errors, String path) {
         return ApiResponse.<T>builder()
-                .success(true)
+                .success(false)
                 .message(message)
                 .errors(errors)
                 .path(path)

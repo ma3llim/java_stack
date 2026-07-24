@@ -29,6 +29,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
     private Boolean isActive;
+    private LocalDateTime lastLogin;
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
     @Builder.Default

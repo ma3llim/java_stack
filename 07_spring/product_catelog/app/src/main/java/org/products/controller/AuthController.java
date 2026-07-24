@@ -3,6 +3,7 @@ package org.products.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.products.Dtos.request.LoginRequestDto;
 import org.products.Dtos.request.RequestDto;
 import org.products.Dtos.response.ApiResponse;
 import org.products.services.AuthService;
@@ -21,5 +22,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<?>> registerUser(@Valid @RequestBody RequestDto user, HttpServletRequest request) {
         return ResponseEntity.ok(authService.registerUser(user, request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<?>> loginUser(@Valid @RequestBody LoginRequestDto user, HttpServletRequest request) {
+        return ResponseEntity.ok(authService.loginUser(user, request));
     }
 }
