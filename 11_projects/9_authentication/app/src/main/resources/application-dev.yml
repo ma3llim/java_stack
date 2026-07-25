@@ -18,9 +18,17 @@ spring:
               - profile
               - openid
 
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            redirect-uri: ${GITHUB_REDIRECT_URI}
+            scope:
+              - read:user
+              - user:email
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -30,8 +38,6 @@ logging:
   level:
     root: INFO
     org.example: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
 
 server:
   port: 8080
@@ -49,3 +55,9 @@ security:
     http-only: ${JWT_COOKIE_HTTP_ONLY}
     same-site: ${JWT_COOKIE_SAME_SITE}
     domain: ${JWT_COOKIE_DOMAIN}
+
+app:
+  auth:
+    frontend:
+      success-redirectUrl: ${FRONTEND_REDIRECTED_SUCCESS}
+      failed-redirectUrl: ${FRONTEND_REDIRECTED_FAILED}
