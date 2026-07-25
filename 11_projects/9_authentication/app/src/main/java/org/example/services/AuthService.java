@@ -2,11 +2,12 @@ package org.example.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.dtos.LoginRequest;
 import org.example.dtos.RefreshTokenRequest;
 import org.example.dtos.TokenResponse;
@@ -19,12 +20,15 @@ import org.example.security.CookieService;
 import org.example.security.JwtService;
 import org.example.security.config.JwtProperties;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +39,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AuthService {
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -142,6 +147,31 @@ public class AuthService {
                 .userDto(modelMapper.map(user, UserDto.class))
                 .tokenType("Bearer")
                 .build();
+    }
+
+    public ResponseEntity<Object> logout(HttpServletResponse response, HttpServletRequest request) {
+        getRefreshTokenFromRequest(null, request).ifPresent(token -> {
+            Jws<Claims> jwsParse = jwtService.parse(token);
+            Claims ClaimsOfToken = jwsParse.getPayload();
+            try {
+                if (jwtService.isRefreshToken(ClaimsOfToken)) {
+                    String jti = jwtService.getJwtId(token);
+                    refreshTokenRepository.findByJti(jti).ifPresent(
+                            refreshToken -> {
+                                refreshToken.setRevoked(true);
+                                refreshTokenRepository.save(refreshToken);
+                            }
+                    );
+                }
+            } catch (JwtException ignored) {
+            }
+        });
+
+        // remove cookies
+        cookieService.clearRefreshCookie(response);
+        cookieService.addNoStoreHeaders(response);
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private Optional<String> getRefreshTokenFromRequest(RefreshTokenRequest refreshTokenRequest, HttpServletRequest request) {
