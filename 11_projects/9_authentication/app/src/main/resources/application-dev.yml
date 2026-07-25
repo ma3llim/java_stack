@@ -61,3 +61,24 @@ app:
     frontend:
       success-redirectUrl: ${FRONTEND_REDIRECTED_SUCCESS}
       failed-redirectUrl: ${FRONTEND_REDIRECTED_FAILED}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: list
+    disable-swagger-default-url: true
+
+  group-configs:
+    - group: Authentication
+      paths-to-match:
+        - /api/v1/auth/**
+
+    - group: Users
+      paths-to-match:
+        - /api/v1/users/**

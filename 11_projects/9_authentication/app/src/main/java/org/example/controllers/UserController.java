@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.example.dtos.UserDto;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
+@Tag(name = "Users", description = "User management APIs")
 public class UserController {
     private final UserService userService;
 
