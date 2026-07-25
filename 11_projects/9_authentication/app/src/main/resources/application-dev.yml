@@ -73,12 +73,3 @@ springdoc:
     tags-sorter: alpha
     doc-expansion: list
     disable-swagger-default-url: true
-
-  group-configs:
-    - group: Authentication
-      paths-to-match:
-        - /api/v1/auth/**
-
-    - group: Users
-      paths-to-match:
-        - /api/v1/users/**
