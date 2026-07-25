@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.dtos.ErrorResponseDto;
 import org.example.security.JwtAuthenticationFilter;
+import org.example.security.OAuth2FailureHandler;
+import org.example.security.OAuth2SuccessHandler;
 import org.example.utils.ErrorResponseWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,8 @@ import java.util.Map;
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ErrorResponseWriter errorResponseWriter;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,6 +48,10 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/auth/refresh-token").permitAll()
                                 .anyRequest().authenticated()
                 )
+                .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer.successHandler(oAuth2SuccessHandler)
+                        .failureHandler(oAuth2FailureHandler)
+                )
+                .logout(AbstractHttpConfigurer::disable)
                 .exceptionHandling(
                         ex -> ex.authenticationEntryPoint((request, response, authException) -> {
                             String message = (String) request.getAttribute("error");

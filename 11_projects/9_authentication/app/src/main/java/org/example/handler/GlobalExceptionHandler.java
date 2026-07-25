@@ -70,7 +70,6 @@ public class GlobalExceptionHandler {
             CredentialException.class,
             DisabledException.class,
             IllegalArgumentException.class
-//            AuthenticationException.class
     })
     public ResponseEntity<ErrorResponseDto> handleAuthException(Exception exception, HttpServletRequest request) {
         log.info("Exception Class: {}", exception.getClass().getName());
