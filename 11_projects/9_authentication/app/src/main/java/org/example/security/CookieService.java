@@ -51,4 +51,8 @@ public class CookieService {
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-store");
         response.setHeader("Pragma", "no-cache");
     }
+
+    public String getRefreshTokenCookieName() {
+        return cookieProperties.getName();
+    }
 }

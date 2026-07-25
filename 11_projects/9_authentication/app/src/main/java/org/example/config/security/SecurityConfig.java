@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/api/v1/auth/register").permitAll()
                                 .requestMatchers("/api/v1/auth/login").permitAll()
+                                .requestMatchers("/api/v1/auth/refresh-token").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(

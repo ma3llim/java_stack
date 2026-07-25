@@ -1,8 +1,14 @@
 package org.example.services;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.dtos.LoginRequest;
+import org.example.dtos.RefreshTokenRequest;
 import org.example.dtos.TokenResponse;
 import org.example.dtos.UserDto;
 import org.example.entities.RefreshToken;
@@ -11,10 +17,8 @@ import org.example.repositories.RefreshTokenRepository;
 import org.example.repositories.UserRepository;
 import org.example.security.CookieService;
 import org.example.security.JwtService;
-import org.example.security.config.CookieProperties;
 import org.example.security.config.JwtProperties;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -23,9 +27,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,7 +52,6 @@ public class AuthService {
     }
 
     public TokenResponse loginUser(LoginRequest loginRequest, HttpServletResponse response) {
-        Authentication authentication = authenticate(loginRequest);
         User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new BadCredentialsException("User Not Found By This Email Id " + loginRequest.getEmail()));
         if (!user.isEnabled()) {
             throw new DisabledException("User is disabled");
@@ -79,17 +83,93 @@ public class AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .expiresIn(jwtProperties.getAccessTtlSeconds())
-                .tokenType("accessToken")
+                .tokenType("Bearer")
                 .userDto(modelMapper.map(user, UserDto.class)).build();
+    }
+
+    public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest, HttpServletResponse response, HttpServletRequest request) {
+        String refreshToken = getRefreshTokenFromRequest(refreshTokenRequest, request).orElseThrow(() -> new BadCredentialsException("Refresh Token is missing"));
+        Jws<Claims> jwsParse = jwtService.parse(refreshToken);
+        Claims ClaimsOfToken = jwsParse.getPayload();
+        if (!jwtService.isRefreshToken(ClaimsOfToken)) {
+            throw new BadCredentialsException("Invalid Refresh Token Type");
+        }
+
+        String jti = jwtService.getJwtId(refreshToken);
+        UUID userId = jwtService.getUserId(refreshToken);
+        RefreshToken storedRefreshToken = refreshTokenRepository.findByJti(jti).orElseThrow(() -> new BadCredentialsException("Invalid Refresh Token"));
+
+        if (storedRefreshToken.isRevoked()) {
+            throw new BadCredentialsException("Refresh token expired or revoked");
+        }
+
+        if (storedRefreshToken.getExpiresAt().isBefore(Instant.now())) {
+            throw new BadCredentialsException("Refresh token expired");
+        }
+
+        if (!storedRefreshToken.getUser().getId().equals(userId)) {
+            throw new BadCredentialsException("Refresh token does not belong to this user");
+        }
+
+        // refresh token rotate:
+        storedRefreshToken.setRevoked(true);
+        String newJti = UUID.randomUUID().toString();
+        storedRefreshToken.setReplacedByToken(newJti);
+
+        User user = storedRefreshToken.getUser();
+
+        var newRefreshTokenDb = RefreshToken.builder()
+                .jti(newJti)
+                .user(user)
+                .createdAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds(jwtProperties.getRefreshTtlSeconds()))
+                .revoked(false)
+                .replacedByToken("")
+                .build();
+
+        refreshTokenRepository.save(newRefreshTokenDb);
+
+        String newAccessToken = jwtService.generateAccessToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user, newJti);
+
+        cookieService.attachRefreshCookie(response, newRefreshToken, (int) jwtProperties.getRefreshTtlSeconds());
+        cookieService.addNoStoreHeaders(response);
+
+        return TokenResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .expiresIn(jwtProperties.getAccessTtlSeconds())
+                .userDto(modelMapper.map(user, UserDto.class))
+                .tokenType("Bearer")
+                .build();
+    }
+
+    private Optional<String> getRefreshTokenFromRequest(RefreshTokenRequest refreshTokenRequest, HttpServletRequest request) {
+        // get token from cookie
+        if (request.getCookies() != null) {
+            Optional<String> fromCookie = Arrays.stream(
+                            request.getCookies()
+                    ).filter(cookie -> cookieService.getRefreshTokenCookieName().equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .filter(v -> !v.isBlank())
+                    .findFirst();
+
+            if (fromCookie.isPresent()) {
+                return fromCookie;
+            }
+        }
+        // get token from body
+        if (refreshTokenRequest != null && refreshTokenRequest.getRefreshToken() != null && !refreshTokenRequest.getRefreshToken().isBlank()) {
+            return Optional.of(refreshTokenRequest.getRefreshToken());
+        }
+        return Optional.empty();
     }
 
     private Authentication authenticate(LoginRequest loginRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
         }
-        return null;
     }
-
 }
