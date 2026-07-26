@@ -2,7 +2,8 @@ package org.example.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -43,6 +45,9 @@ public class ChatService {
 
         Prompt prompt = new Prompt(systemMessage, renderedMessage);
 
-        return chatClient.prompt(prompt).call().content();
+        return chatClient.prompt(prompt).advisors(
+                new SimpleLoggerAdvisor(),
+                new SafeGuardAdvisor(List.of("bomb", "hack", "malware"))
+        ).call().content();
     }
 }
