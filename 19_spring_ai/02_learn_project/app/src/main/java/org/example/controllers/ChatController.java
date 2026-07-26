@@ -20,7 +20,7 @@ public class ChatController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tut>> chat(@RequestParam(value = "query", required = true) String query) {
+    public ResponseEntity<String> chat(@RequestParam(value = "query", required = true) String query) {
         return ResponseEntity.ok(chatService.chat(query));
     }
 }
