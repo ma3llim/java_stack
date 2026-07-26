@@ -5,11 +5,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.AppConstants;
 import org.example.dtos.GithubEmailResponse;
 import org.example.entities.RefreshToken;
+import org.example.entities.Role;
 import org.example.entities.User;
 import org.example.enums.Provider;
 import org.example.repositories.RefreshTokenRepository;
+import org.example.repositories.RoleRepository;
 import org.example.repositories.UserRepository;
 import org.example.security.config.JwtProperties;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +42,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final CookieService cookieService;
     private final JwtProperties jwtProperties;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
     @Value("${app.auth.frontend.success-redirectUrl}")
@@ -82,6 +86,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                                     .provider(Provider.GOOGLE)
                                     .build();
 
+                            // assigning roles
+                            Role role = roleRepository.findByName(AppConstants.USER_ROLE).orElse(null);
+                            newUser.getRoles().add(role);
                             return userRepository.save(newUser);
                         });
                 break;
@@ -113,7 +120,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                                     .provider(Provider.GITHUB)
                                     .build();
 
-
+                            // assigning roles
+                            Role role = roleRepository.findByName(AppConstants.USER_ROLE).orElse(null);
+                            newUser.getRoles().add(role);
                             return userRepository.save(newUser);
                         });
                 break;

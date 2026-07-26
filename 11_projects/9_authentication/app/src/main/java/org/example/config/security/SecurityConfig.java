@@ -3,7 +3,7 @@ package org.example.config.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.dtos.ErrorResponseDto;
+import org.example.config.AppConstants;
 import org.example.security.JwtAuthenticationFilter;
 import org.example.security.OAuth2FailureHandler;
 import org.example.security.OAuth2SuccessHandler;
@@ -20,9 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -47,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/refresh-token").permitAll()
                                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers("/api/v1/users/**").hasRole(AppConstants.ADMIN_ROLE)
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer.successHandler(oAuth2SuccessHandler)
@@ -55,19 +53,33 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .exceptionHandling(
                         ex -> ex.authenticationEntryPoint((request, response, authException) -> {
-                            String message = (String) request.getAttribute("error");
+                                    String message = (String) request.getAttribute("error");
 
-                            if (message == null) {
-                                message = authException.getMessage();
-                            }
+                                    if (message == null) {
+                                        message = authException.getMessage();
+                                    }
 
-                            errorResponseWriter.writeErrorResponse(
-                                    request,
-                                    response,
-                                    HttpServletResponse.SC_UNAUTHORIZED,
-                                    message
-                            );
-                        })
+                                    errorResponseWriter.writeErrorResponse(
+                                            request,
+                                            response,
+                                            HttpServletResponse.SC_UNAUTHORIZED,
+                                            message
+                                    );
+                                })
+                                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                                    String message = (String) request.getAttribute("error");
+
+                                    if (message == null) {
+                                        message = accessDeniedException.getMessage();
+                                    }
+
+                                    errorResponseWriter.writeErrorResponse(
+                                            request,
+                                            response,
+                                            HttpServletResponse.SC_FORBIDDEN,
+                                            message
+                                    );
+                                })
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

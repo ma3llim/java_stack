@@ -1,10 +1,13 @@
 package org.example.services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.config.AppConstants;
 import org.example.dtos.UserDto;
+import org.example.entities.Role;
 import org.example.entities.User;
 import org.example.enums.Provider;
 import org.example.exceptions.ResourceNotFoundException;
+import org.example.repositories.RoleRepository;
 import org.example.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -30,6 +34,8 @@ public class UserServiceImpl implements UserService {
 
         User user = modelMapper.map(userDto, User.class);
         user.setProvider(userDto.getProvider() != null ? userDto.getProvider() : Provider.INTERNAL);
+        Role role = roleRepository.findByName(AppConstants.USER_ROLE).orElse(null);
+        user.getRoles().add(role);
 
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserDto.class);

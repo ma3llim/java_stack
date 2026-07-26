@@ -3,14 +3,46 @@
  */
 package org.example;
 
+import org.example.config.AppConstants;
+import org.example.entities.Role;
+import org.example.repositories.RoleRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class App {
+public class App implements CommandLineRunner {
+    private final RoleRepository roleRepository;
+
+    public App(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
+    }
+
+    /**
+     * @param args
+     * @throws Exception
+     */
+    @Override
+    public void run(String... args) throws Exception {
+        // CREATING THE ROLES
+        Role adminRole = roleRepository.findByName(AppConstants.ADMIN_ROLE)
+                .orElseGet(() -> {
+                    Role role = Role.builder().name(AppConstants.ADMIN_ROLE).build();
+                    return roleRepository.save(role);
+                });
+        Role userRole = roleRepository.findByName(AppConstants.USER_ROLE)
+                .orElseGet(() -> {
+                    Role role = Role.builder().name(AppConstants.USER_ROLE).build();
+                    return roleRepository.save(role);
+
+                });
+
+
     }
 }
