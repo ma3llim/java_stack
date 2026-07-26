@@ -17,9 +17,9 @@ import java.util.Map;
 @Slf4j
 public class ChatService {
     private final ChatClient chatClient;
-    @Value("classpath:/prompts/chat-user-prompt.st")
+    @Value("classpath:/prompts/users/chat-user-prompt.st")
     private Resource userPrompt;
-    @Value("classpath:/prompts/chat-system-prompt.st")
+    @Value("classpath:/prompts/users/chat-system-prompt.st")
     private Resource systemPrompt;
 
     public ChatService(ChatClient.Builder chatClientBuilder) {
@@ -32,16 +32,13 @@ public class ChatService {
     }
 
     public String chat(String query) {
-        var systemPromptTemplate = SystemPromptTemplate.builder()
-                .template(String.valueOf(this.systemPrompt)).build();
-
+        // system prompt
+        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPrompt);
         var systemMessage = systemPromptTemplate.createMessage();
-
-        var userPromptTemplate = PromptTemplate.builder().template(String.valueOf(this.userPrompt)).build();
-
+        // user prompt
+        PromptTemplate userPromptTemplate = new PromptTemplate(userPrompt);
         var renderedMessage = userPromptTemplate.createMessage(Map.of(
-                "techName", "Spring",
-                "exampleName", "Spring Boot"
+                "techName", query
         ));
 
         Prompt prompt = new Prompt(systemMessage, renderedMessage);

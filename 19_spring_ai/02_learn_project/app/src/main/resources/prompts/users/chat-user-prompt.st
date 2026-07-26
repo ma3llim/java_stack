@@ -1,0 +1,1 @@
+What is {techName}? Tell me with a simple example.
