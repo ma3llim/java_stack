@@ -7,6 +7,8 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -15,6 +17,10 @@ import java.util.Map;
 @Slf4j
 public class ChatService {
     private final ChatClient chatClient;
+    @Value("classpath:/prompts/chat-user-prompt.st")
+    private Resource userPrompt;
+    @Value("classpath:/prompts/chat-system-prompt.st")
+    private Resource systemPrompt;
 
     public ChatService(ChatClient.Builder chatClientBuilder) {
         this.chatClient = chatClientBuilder
@@ -27,11 +33,11 @@ public class ChatService {
 
     public String chat(String query) {
         var systemPromptTemplate = SystemPromptTemplate.builder()
-                .template("you are a helpful coding assistant. you are an expert in coding").build();
+                .template(String.valueOf(this.systemPrompt)).build();
 
         var systemMessage = systemPromptTemplate.createMessage();
 
-        var userPromptTemplate = PromptTemplate.builder().template("What is {techName}? tell me example of {exampleName}").build();
+        var userPromptTemplate = PromptTemplate.builder().template(String.valueOf(this.userPrompt)).build();
 
         var renderedMessage = userPromptTemplate.createMessage(Map.of(
                 "techName", "Spring",
