@@ -16,6 +16,10 @@ public class ChatService {
 
     public String chat(String query) {
         Prompt prompt = new Prompt(query);
-        return chatClient.prompt(prompt).call().content();
+        // modify this prompt and extra things to prompt make it more interactive
+        String queryStr = "As an expert in coding and programming. Always write program in java.";
+
+        return chatClient.prompt().user(u -> u.text(queryStr).param("query", queryStr))
+                .call().content();
     }
 }
