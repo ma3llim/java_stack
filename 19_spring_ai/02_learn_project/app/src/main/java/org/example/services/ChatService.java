@@ -1,6 +1,7 @@
 package org.example.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.advisors.UsagesPrinter;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -46,6 +47,7 @@ public class ChatService {
         Prompt prompt = new Prompt(systemMessage, renderedMessage);
 
         return chatClient.prompt(prompt).advisors(
+                new UsagesPrinter(),
                 new SimpleLoggerAdvisor(),
                 new SafeGuardAdvisor(List.of("bomb", "hack", "malware"))
         ).call().content();

@@ -7,7 +7,3 @@ spring:
         options:
           model: nvidia/nemotron-3-nano-30b-a3b:free
           temperature: 0.7
-
-logging:
-  level:
-    org.springframework.ai.chat.client.advisor: DEBUG
