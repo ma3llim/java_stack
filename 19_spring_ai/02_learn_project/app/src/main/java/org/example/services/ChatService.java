@@ -10,7 +10,9 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -23,12 +25,14 @@ import java.util.Map;
 @Slf4j
 public class ChatService {
     private final ChatClient chatClient;
+    private final VectorStore vectorStore;
     @Value("classpath:/prompts/users/chat-user-prompt.st")
     private Resource userPrompt;
     @Value("classpath:/prompts/users/chat-system-prompt.st")
     private Resource systemPrompt;
 
-    public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory) {
+    public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, VectorStore vectorStore) {
+        this.vectorStore = vectorStore;
         MessageChatMemoryAdvisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
         this.chatClient = chatClientBuilder
                 .defaultAdvisors(messageChatMemoryAdvisor)
@@ -67,4 +71,9 @@ public class ChatService {
                 .stream().content();
     }
 
+    public String saveDataToVectorFormat(List<String> listData) {
+        List<Document> documentList = listData.stream().map(Document::new).toList();
+        this.vectorStore.add(documentList);
+        return "Data Stored Successfully";
+    }
 }
