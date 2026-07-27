@@ -16,5 +16,8 @@ public class AppTests {
         var output = this.chatService.chat("Spring", "123");
         System.out.println(output);
     }
+
+    @Test
+    void
 }
 

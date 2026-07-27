@@ -33,7 +33,10 @@ dependencies {
     // open ai
     implementation 'org.springframework.ai:spring-ai-starter-model-openai'
     implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory-repository-jdbc'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    // db
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    // vector store mariadb
+    implementation 'org.springframework.ai:spring-ai-starter-vector-store-mariadb'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
