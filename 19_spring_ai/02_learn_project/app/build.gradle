@@ -32,6 +32,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     // open ai
     implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+    implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory-repository-jdbc'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
