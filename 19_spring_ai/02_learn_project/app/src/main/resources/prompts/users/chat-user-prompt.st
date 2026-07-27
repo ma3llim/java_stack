@@ -1,1 +1,1 @@
-What is {techName}? Tell me with a simple example.
+explain the coding concepts: {concept}.

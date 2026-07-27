@@ -12,6 +12,7 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,6 @@ public class ChatService {
         this.chatClient = chatClientBuilder
                 .defaultOptions(
                         OpenAiChatOptions.builder()
-                                .maxTokens(200)
                                 .build()
                 ).build();
     }
@@ -52,4 +52,12 @@ public class ChatService {
                 new SafeGuardAdvisor(List.of("bomb", "hack", "malware"))
         ).call().content();
     }
+
+    public Flux<String> streamingChatResponse(String query) {
+        return chatClient.prompt()
+                .system(promptSystemSpec -> promptSystemSpec.text(systemPrompt))
+                .user(promptUserSpec -> promptUserSpec.text(userPrompt).param("concept", query))
+                .stream().content();
+    }
+
 }
