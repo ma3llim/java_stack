@@ -3,8 +3,10 @@ package org.example.services;
 import lombok.extern.slf4j.Slf4j;
 import org.example.advisors.UsagesPrinter;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
@@ -26,31 +28,36 @@ public class ChatService {
     @Value("classpath:/prompts/users/chat-system-prompt.st")
     private Resource systemPrompt;
 
-    public ChatService(ChatClient.Builder chatClientBuilder) {
+    public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory) {
+        MessageChatMemoryAdvisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
         this.chatClient = chatClientBuilder
+                .defaultAdvisors(messageChatMemoryAdvisor)
                 .defaultOptions(
                         OpenAiChatOptions.builder()
+                                .maxTokens(100)
                                 .build()
                 ).build();
     }
 
-    public String chat(String query) {
+    public String chat(String query, String userId) {
         // system prompt
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPrompt);
         var systemMessage = systemPromptTemplate.createMessage();
         // user prompt
         PromptTemplate userPromptTemplate = new PromptTemplate(userPrompt);
         var renderedMessage = userPromptTemplate.createMessage(Map.of(
-                "techName", query
+                "concept", query
         ));
 
         Prompt prompt = new Prompt(systemMessage, renderedMessage);
 
-        return chatClient.prompt(prompt).advisors(
-                new UsagesPrinter(),
-                new SimpleLoggerAdvisor(),
-                new SafeGuardAdvisor(List.of("bomb", "hack", "malware"))
-        ).call().content();
+        return chatClient.prompt(prompt)
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, userId))
+                .advisors(
+                        new UsagesPrinter(),
+                        new SimpleLoggerAdvisor(),
+                        new SafeGuardAdvisor(List.of("bomb", "hack", "malware"))
+                ).call().content();
     }
 
     public Flux<String> streamingChatResponse(String query) {

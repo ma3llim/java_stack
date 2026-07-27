@@ -5,5 +5,9 @@ spring:
       base-url: https://openrouter.ai/api
       chat:
         options:
-          model: nvidia/nemotron-3-nano-30b-a3b:free
+          model: openai/gpt-oss-20b:free
           temperature: 0.7
+
+logging:
+  level:
+    org.springframework.ai.chat.client.advisor: DEBUG

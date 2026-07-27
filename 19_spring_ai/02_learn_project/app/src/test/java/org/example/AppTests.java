@@ -13,7 +13,7 @@ public class AppTests {
     @Test
     void testTemplateRender() {
         System.out.println("Template Render");
-        var output = this.chatService.chat("Spring");
+        var output = this.chatService.chat("Spring", "123");
         System.out.println(output);
     }
 }

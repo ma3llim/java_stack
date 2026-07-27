@@ -1,1 +1,1 @@
-explain the coding concepts: {concept}.
+ {concept}
