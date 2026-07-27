@@ -12,6 +12,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -44,19 +45,38 @@ public class ChatService {
     }
 
     public String chat(String query, String userId) {
+        // load data from vector databased
+        SearchRequest searchRequest = SearchRequest.builder().topK(3)
+                .query(query).build();
+
+        List<Document> documentsVector = this.vectorStore.similaritySearch(searchRequest);
+        if (documentsVector.isEmpty()) {
+            return "This query is not in my database";
+        }
+        log.info("Documents {}", documentsVector);
+
+        // similar result in user query
+        List<String> documentsLists = documentsVector.stream()
+                .map(Document::getText).toList();
+
+        // pass in context
+        String contextData = String.join(", ", documentsLists);
+
         // system prompt
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPrompt);
-        var systemMessage = systemPromptTemplate.createMessage();
+        var systemMessage = systemPromptTemplate.createMessage(Map.of(
+                "documents", contextData
+        ));
+
         // user prompt
         PromptTemplate userPromptTemplate = new PromptTemplate(userPrompt);
         var renderedMessage = userPromptTemplate.createMessage(Map.of(
-                "concept", query
+                "query", query
         ));
 
         Prompt prompt = new Prompt(systemMessage, renderedMessage);
 
         return chatClient.prompt(prompt)
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, userId))
                 .advisors(
                         new UsagesPrinter(),
                         new SimpleLoggerAdvisor(),
