@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     boolean existsByNameIgnoreCase(String name);
 
     Optional<Product> findByNameIgnoreCase(String name);
+
+    List<Product> findByPriceLessThan(double price);
 }
