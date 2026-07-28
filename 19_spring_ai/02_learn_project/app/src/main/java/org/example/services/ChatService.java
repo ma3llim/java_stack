@@ -1,18 +1,17 @@
 package org.example.services;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.example.advisors.UsagesPrinter;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -32,51 +31,31 @@ public class ChatService {
     @Value("classpath:/prompts/users/chat-system-prompt.st")
     private Resource systemPrompt;
 
-    public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, VectorStore vectorStore) {
+    public ChatService(ChatClient.Builder chatClientBuilder, VectorStore vectorStore) {
         this.vectorStore = vectorStore;
         this.chatClient = chatClientBuilder
                 .defaultOptions(
                         OpenAiChatOptions.builder()
-                                .maxTokens(100)
                                 .build()
                 ).build();
     }
 
     public String chat(String query, String userId) {
-        // load data from vector databased
-        SearchRequest searchRequest = SearchRequest.builder().topK(3)
-                .similarityThreshold(0.75)
-                .query(query).build();
+        var retrievalAdvisor = RetrievalAugmentationAdvisor.builder()
+                .documentRetriever(VectorStoreDocumentRetriever
+                        .builder()
+                        .vectorStore(vectorStore)
+                        .similarityThreshold(0.75)
+                        .topK(3)
+                        .build()
+                ).queryAugmenter(ContextualQueryAugmenter.builder().allowEmptyContext(true).build())
+                .build();
 
-        List<Document> documentsVector = this.vectorStore.similaritySearch(searchRequest);
-        if (documentsVector.isEmpty()) {
-            return "This query is not in my database";
-        }
-        log.info("Documents {}", documentsVector);
 
-        // similar result in user query
-        List<String> documentsLists = documentsVector.stream()
-                .map(Document::getText).toList();
-
-        // pass in context
-        String contextData = String.join("\n\n", documentsLists);
-
-        // system prompt
-        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPrompt);
-        var systemMessage = systemPromptTemplate.createMessage(Map.of(
-                "documents", contextData
-        ));
-
-        // user prompt
-        PromptTemplate userPromptTemplate = new PromptTemplate(userPrompt);
-        var renderedMessage = userPromptTemplate.createMessage(Map.of(
-                "query", query
-        ));
-
-        Prompt prompt = new Prompt(systemMessage, renderedMessage);
-
-        return chatClient.prompt(prompt)
+        return chatClient.prompt()
+                .user(query)
                 .advisors(
+                        retrievalAdvisor,
                         new UsagesPrinter(),
                         new SimpleLoggerAdvisor(),
                         new SafeGuardAdvisor(List.of("bomb", "hack", "malware"))

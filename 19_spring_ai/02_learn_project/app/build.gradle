@@ -38,6 +38,9 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     // vector store mariadb
     implementation 'org.springframework.ai:spring-ai-starter-vector-store-mariadb'
+    // advisors vector ai store
+    implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
+    implementation 'org.springframework.ai:spring-ai-rag'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
