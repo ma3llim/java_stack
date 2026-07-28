@@ -4,8 +4,10 @@
 package org.example;
 
 import org.example.utils.DataLoader;
+import org.example.utils.DataTransformer;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,16 +17,25 @@ import java.util.List;
 public class AppTest {
     @Autowired
     private DataLoader dataLoader;
+    @Autowired
+    private DataTransformer dataTransformer;
+    @Autowired
+    private VectorStore vectorStore;
 
     @Test
     public void testDataLoaderJson() {
         var documents = dataLoader.loadDocumentsFromJson();
-        documents.forEach(System.out::println);
+        var transformedData = dataTransformer.transform(documents);
+        vectorStore.add(transformedData);
+        System.out.println("Data Save Successfully");
     }
 
     @Test
     public void testDataLoaderPDF() {
         List<Document> documents = dataLoader.loadDocumentsFromDPF();
-        documents.forEach(System.out::println);
+        var transformedData = dataTransformer.transform(documents);
+        vectorStore.add(transformedData);
+        System.out.println("Data Save Successfully");
     }
+
 }
