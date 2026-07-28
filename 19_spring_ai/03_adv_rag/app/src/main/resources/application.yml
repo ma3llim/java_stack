@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3300/${VECTOR_DB_NAME}
+    username: ${VECTOR_DB_USERNAME}
+    password: ${VECTOR_DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  ai:
+    openai:
+      api-key: ${OPENROUTER_API_KEY}
+      base-url: https://openrouter.ai/api
+      chat:
+        options:
+          model: openai/gpt-oss-20b:free
+          temperature: 0.7
+
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+
+    vectorstore:
+      mariadb:
+        initialize-schema: true
+
+logging:
+  level:
+    org.springframework.ai.chat.client.advisor: DEBUG
