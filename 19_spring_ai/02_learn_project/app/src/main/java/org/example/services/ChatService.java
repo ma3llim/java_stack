@@ -34,9 +34,7 @@ public class ChatService {
 
     public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, VectorStore vectorStore) {
         this.vectorStore = vectorStore;
-        MessageChatMemoryAdvisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
         this.chatClient = chatClientBuilder
-                .defaultAdvisors(messageChatMemoryAdvisor)
                 .defaultOptions(
                         OpenAiChatOptions.builder()
                                 .maxTokens(100)
@@ -47,6 +45,7 @@ public class ChatService {
     public String chat(String query, String userId) {
         // load data from vector databased
         SearchRequest searchRequest = SearchRequest.builder().topK(3)
+                .similarityThreshold(0.75)
                 .query(query).build();
 
         List<Document> documentsVector = this.vectorStore.similaritySearch(searchRequest);
@@ -60,7 +59,7 @@ public class ChatService {
                 .map(Document::getText).toList();
 
         // pass in context
-        String contextData = String.join(", ", documentsLists);
+        String contextData = String.join("\n\n", documentsLists);
 
         // system prompt
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPrompt);
