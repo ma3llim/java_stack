@@ -41,6 +41,8 @@ dependencies {
     // advisors vector ai store
     implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
     implementation 'org.springframework.ai:spring-ai-rag'
+    // PDF PAGE
+    implementation 'org.springframework.ai:spring-ai-pdf-document-reader'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -60,4 +62,14 @@ dependencyManagement {
     imports {
         mavenBom "org.springframework.ai:spring-ai-bom:1.0.1"
     }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+
+    // hiding warnings
+    jvmArgs += [
+            "-XX:+EnableDynamicAgentLoading",
+            "-Xshare:off"
+    ]
 }

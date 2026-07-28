@@ -3,12 +3,28 @@
  */
 package org.example;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.example.utils.DataLoader;
+import org.junit.jupiter.api.Test;
+import org.springframework.ai.document.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
+@SpringBootTest
 public class AppTest {
-    @Test public void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+    @Autowired
+    private DataLoader dataLoader;
+
+    @Test
+    public void testDataLoaderJson() {
+        var documents = dataLoader.loadDocumentsFromJson();
+        documents.forEach(System.out::println);
+    }
+
+    @Test
+    public void testDataLoaderPDF() {
+        List<Document> documents = dataLoader.loadDocumentsFromDPF();
+        documents.forEach(System.out::println);
     }
 }
