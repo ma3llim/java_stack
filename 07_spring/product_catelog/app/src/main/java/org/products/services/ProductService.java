@@ -11,6 +11,7 @@ import org.products.entities.Product;
 import org.products.exceptions.ProductNotFound;
 import org.products.repository.ProductRepository;
 import org.products.utils.ProductSpecificationUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -83,9 +84,11 @@ public class ProductService {
         return response;
     }
 
+    @Cacheable(cacheNames = "productById", key = "#productId")
     public ProductResponseDTO getProductById(UUID productId) throws ProductNotFound {
         log.info("Fetching product with ID: {}", productId);
 
+        log.info("Fetching from Database...");
         Product product = productRepository.findById(productId)
                 .stream()
                 .findFirst()
@@ -110,7 +113,7 @@ public class ProductService {
         if (productId == null) {
             throw new IllegalArgumentException("Product ID is required for deleting");
         }
-        
+
         if (productId.toString().isEmpty()) {
             throw new IllegalArgumentException("Product ID is required for deleting");
         }
