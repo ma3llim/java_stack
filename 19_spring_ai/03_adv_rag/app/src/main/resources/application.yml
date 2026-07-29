@@ -23,6 +23,9 @@ spring:
     vectorstore:
       mariadb:
         initialize-schema: true
+app:
+  weather:
+    api-key: ${WEATHER_AP_KEY}
 
 logging:
   level:

@@ -3,6 +3,7 @@
  */
 package org.example;
 
+import org.example.tools.WeatherTool;
 import org.example.utils.DataLoader;
 import org.example.utils.DataTransformer;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,10 @@ public class AppTest {
     private DataTransformer dataTransformer;
     @Autowired
     private VectorStore vectorStore;
+    @Autowired
+    private WeatherTool weatherTool;
 
-    @Test
+    // @Test
     public void testDataLoaderJson() {
         var documents = dataLoader.loadDocumentsFromJson();
         var transformedData = dataTransformer.transform(documents);
@@ -30,7 +33,7 @@ public class AppTest {
         System.out.println("Data Save Successfully");
     }
 
-    @Test
+    // @Test
     public void testDataLoaderPDF() {
         List<Document> documents = dataLoader.loadDocumentsFromDPF();
         var transformedData = dataTransformer.transform(documents);
@@ -38,4 +41,9 @@ public class AppTest {
         System.out.println("Data Save Successfully");
     }
 
+    @Test
+    public void testGetWeatherTest() {
+        String hyderabad = weatherTool.getWeather("hyderabad");
+        System.out.println(hyderabad);
+    }
 }

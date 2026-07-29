@@ -17,7 +17,12 @@ public class ChatController {
     }
 
     @PostMapping
-    public ResponseEntity<String> getResponse(@RequestParam("query") String userQuery){
+    public ResponseEntity<String> getResponse(@RequestParam("query") String userQuery) {
         return ResponseEntity.ok(chatService.getResponse(userQuery));
+    }
+
+    @PostMapping("/weather-info")
+    public ResponseEntity<String> weatherInfo(@RequestParam("query") String userQuery) {
+        return ResponseEntity.ok(chatService.weatherInfo(userQuery));
     }
 }
