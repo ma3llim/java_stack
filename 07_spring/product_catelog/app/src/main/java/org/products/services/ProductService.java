@@ -32,7 +32,10 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final PaginationProperties paginationProperties;
 
-    @Cacheable(cacheNames = "products", key = "products")
+    @Cacheable(
+            cacheNames = "products",
+            key = "#page + '-' + #limit + '-' + #sortBy + '-' + #direction + '-' + #search + '-' + #minPrice + '-' + #maxPrice"
+    )
     public PageResponse<ProductResponseDTO> getProducts(
             int page,
             int limit,
@@ -140,7 +143,7 @@ public class ProductService {
             ),
             @CacheEvict(
                     cacheNames = "productByCategory",
-                    key = "#productRequest.category"
+                    allEntries = true
             )
     })
     public ProductResponseDTO addProduct(ProductRequestDTO productRequest) {
@@ -169,9 +172,23 @@ public class ProductService {
         return product.toResponseDTO();
     }
 
-    @CachePut(
-            cacheNames = "productById",
-            key = "#productId"
+    @Caching(
+            put = {
+                    @CachePut(
+                            cacheNames = "productById",
+                            key = "#productId"
+                    )
+            },
+            evict = {
+                    @CacheEvict(
+                            cacheNames = "products",
+                            allEntries = true
+                    ),
+                    @CacheEvict(
+                            cacheNames = "productByCategory",
+                            allEntries = true
+                    )
+            }
     )
     public ProductResponseDTO updateProduct(UUID productId, @Valid ProductRequestDTO productRequest) throws ProductNotFound {
         if (productId == null) {
