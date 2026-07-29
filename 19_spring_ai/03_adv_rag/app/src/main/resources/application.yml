@@ -23,6 +23,11 @@ spring:
     vectorstore:
       mariadb:
         initialize-schema: true
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:servers.json
+
 app:
   weather:
     api-key: ${WEATHER_AP_KEY}

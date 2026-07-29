@@ -25,4 +25,9 @@ public class ChatController {
     public ResponseEntity<String> weatherInfo(@RequestParam("query") String userQuery) {
         return ResponseEntity.ok(chatService.weatherInfo(userQuery));
     }
+
+    @PostMapping("/mcp")
+    public ResponseEntity<String> mcpResponse(@RequestParam("query") String userQuery) {
+        return ResponseEntity.ok(chatService.mcpResponse(userQuery));
+    }
 }

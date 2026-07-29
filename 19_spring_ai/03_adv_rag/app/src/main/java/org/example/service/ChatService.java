@@ -58,4 +58,11 @@ public class ChatService {
                 .tools(weatherTool)
                 .call().content();
     }
+
+    public String mcpResponse(String userQuery) {
+        return chatClient.prompt()
+                .user(userQuery)
+                .call()
+                .content();
+    }
 }

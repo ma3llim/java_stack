@@ -43,6 +43,8 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-rag'
     // PDF PAGE
     implementation 'org.springframework.ai:spring-ai-pdf-document-reader'
+    // MCP
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
