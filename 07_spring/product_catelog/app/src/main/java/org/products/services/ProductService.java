@@ -11,7 +11,10 @@ import org.products.entities.Product;
 import org.products.exceptions.ProductNotFound;
 import org.products.repository.ProductRepository;
 import org.products.utils.ProductSpecificationUtil;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +32,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final PaginationProperties paginationProperties;
 
-    @Cacheable("products")
+    @Cacheable(cacheNames = "products", key = "products")
     public PageResponse<ProductResponseDTO> getProducts(
             int page,
             int limit,
@@ -100,6 +103,7 @@ public class ProductService {
         return productResponseDTO;
     }
 
+    @Cacheable(cacheNames = "productByCategory", key = "#category")
     public List<ProductResponseDTO> getProductByCategory(String category) {
         log.info("Fetching products for category: {}", category);
         List<ProductResponseDTO> products = productRepository.findByCategory(category.toLowerCase().trim())
@@ -110,6 +114,11 @@ public class ProductService {
         return products;
     }
 
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "productById", key = "#productId"),
+            @CacheEvict(cacheNames = "products", allEntries = true),
+            @CacheEvict(cacheNames = "productByCategory", allEntries = true)
+    })
     public void deleteProductById(UUID productId) throws ProductNotFound {
         if (productId == null) {
             throw new IllegalArgumentException("Product ID is required for deleting");
@@ -124,6 +133,16 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    cacheNames = "products",
+                    allEntries = true
+            ),
+            @CacheEvict(
+                    cacheNames = "productByCategory",
+                    key = "#productRequest.category"
+            )
+    })
     public ProductResponseDTO addProduct(ProductRequestDTO productRequest) {
         log.info("Adding new product: {}", productRequest.getName());
         if (productRequest.getName() == null) {
@@ -150,6 +169,10 @@ public class ProductService {
         return product.toResponseDTO();
     }
 
+    @CachePut(
+            cacheNames = "productById",
+            key = "#productId"
+    )
     public ProductResponseDTO updateProduct(UUID productId, @Valid ProductRequestDTO productRequest) throws ProductNotFound {
         if (productId == null) {
             throw new IllegalArgumentException("Product ID cannot be null");
