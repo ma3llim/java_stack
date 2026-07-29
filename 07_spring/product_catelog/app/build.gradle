@@ -50,6 +50,9 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
     testImplementation 'org.mockito:mockito-core:5.3.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
 // Test Configuration
