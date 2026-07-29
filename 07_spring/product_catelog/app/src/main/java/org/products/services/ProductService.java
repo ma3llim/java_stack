@@ -29,6 +29,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final PaginationProperties paginationProperties;
 
+    @Cacheable("products")
     public PageResponse<ProductResponseDTO> getProducts(
             int page,
             int limit,
