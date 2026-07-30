@@ -35,3 +35,11 @@ app:
 logging:
   level:
     org.springframework.ai.chat.client.advisor: DEBUG
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: "env,beans"

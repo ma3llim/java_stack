@@ -45,6 +45,10 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-pdf-document-reader'
     // MCP
     implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // Micrometer
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
