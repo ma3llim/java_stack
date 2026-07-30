@@ -7,6 +7,8 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id 'java'
+    id 'jacoco'
     id 'application'
     id 'org.springframework.boot' version '4.1.0'
     id 'io.spring.dependency-management' version '1.1.7'
@@ -55,6 +57,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
+// JaCoCo Test Configuration
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = true
+    }
+}
+
 // Test Configuration
 test {
     useJUnitPlatform()
@@ -64,6 +76,8 @@ test {
         showStandardStreams true
     }
     jvmArgs '-XX:+EnableDynamicAgentLoading', '-Xshare:off'
+
+    finalizedBy jacocoTestReport
 }
 
 // Proper way to suppress Gradle warnings
