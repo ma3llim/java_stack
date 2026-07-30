@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.dtos.AiResponse;
 import org.example.tools.WeatherTool;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
@@ -64,5 +65,15 @@ public class ChatService {
                 .user(userQuery)
                 .call()
                 .content();
+    }
+
+
+    public AiResponse getResponseWithMonitorData(String userQuery) {
+        String AiResponse = chatClient.prompt()
+                .user(userQuery)
+                .call()
+                .content();
+
+        return new AiResponse(AiResponse, true);
     }
 }
