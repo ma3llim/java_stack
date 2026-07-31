@@ -26,8 +26,14 @@ jobs:
       - name: Give Gradlew Permission
         run: chmod +x gradlew
 
-      - name: Run Tests
-        run: ./gradlew test
+      - name: Run Tests With Coverage
+        run: ./gradlew test jacocoTestReport jacocoTestCoverageVerification
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: 07_spring/product_catelog/app/build/reports/jacoco/test/html
 
       - name: Login To Docker Hub
         uses: docker/login-action@v3
