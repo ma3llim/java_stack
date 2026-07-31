@@ -80,6 +80,17 @@ test {
     finalizedBy jacocoTestReport
 }
 
+// JaCoCo Test Coverage Verification
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.80
+            }
+        }
+    }
+}
+
 // Proper way to suppress Gradle warnings
 gradle.startParameter.showStacktrace = ShowStacktrace.ALWAYS_FULL
 
