@@ -14,7 +14,7 @@ jobs:
         working-directory: 07_spring/product_catelog
 
     steps:
-      - name: checkcode code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup Java 21
@@ -23,11 +23,14 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Give gradlew permission
+      - name: Give Gradlew Permission
         run: chmod +x gradlew
 
-      - name: Run tests
+      - name: Run Tests
         run: ./gradlew test
 
-      - name: Build Docker image
+      - name: Build Docker Image
         run: docker build -t product-catelog:latest .
+
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/product-catelog:latest
