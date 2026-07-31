@@ -11,7 +11,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: java/07_spring/product_catelog
+        working-directory: 07_spring/product_catelog
 
     steps:
       - name: checkcode code
