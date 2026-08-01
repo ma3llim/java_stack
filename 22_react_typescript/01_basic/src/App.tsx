@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import Input from "./components/Input/Input";
+import LoadingSpinner from "./components/spinner/LoadingSpinner";
 
 function App() {
     const [name, setName] = useState("");
@@ -13,7 +14,7 @@ function App() {
             <br />
             <br />
             <div className="card-container">
-                <Input label="Name" value={name} onChange={setName} error="" />
+                <LoadingSpinner />
             </div>
         </div>
     );
