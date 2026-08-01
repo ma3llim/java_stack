@@ -1,9 +1,7 @@
-import Button from "./components/Button/Button";
+import Card from "./components/card/Card";
+import "./App.css";
 
 function App() {
-    const handleOnClick = () => {
-        console.log("Handle On Click");
-    };
     return (
         <div className="hero">
             <br />
@@ -11,9 +9,11 @@ function App() {
             <br />
             <br />
             <br />
-            <Button onClick={handleOnClick} variant="secondary">
-                Submit
-            </Button>
+            <div className="card-container">
+                <Card title="Testing Title" description="description testing" imageUrl="https://placehold.co/250x200" />
+                <Card title="Testing Title" description="description testing" imageUrl="https://placehold.co/250x200" />
+                <Card title="Testing Title" description="description testing" imageUrl="https://placehold.co/250x200" />
+            </div>
         </div>
     );
 }
