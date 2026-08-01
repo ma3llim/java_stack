@@ -1,8 +1,10 @@
-import Card from "./components/card/Card";
+import { useState } from "react";
 import "./App.css";
-import Bedge from "./components/Bedge/Bedge";
+import Input from "./components/Input/Input";
 
 function App() {
+    const [name, setName] = useState("");
+
     return (
         <div className="hero">
             <br />
@@ -11,7 +13,7 @@ function App() {
             <br />
             <br />
             <div className="card-container">
-                <Bedge color="red" text="based bedge" />
+                <Input label="Name" value={name} onChange={setName} error="" />
             </div>
         </div>
     );
