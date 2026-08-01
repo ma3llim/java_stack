@@ -1,5 +1,6 @@
 import Card from "./components/card/Card";
 import "./App.css";
+import Bedge from "./components/Bedge/Bedge";
 
 function App() {
     return (
@@ -10,9 +11,7 @@ function App() {
             <br />
             <br />
             <div className="card-container">
-                <Card title="Testing Title" description="description testing" imageUrl="https://placehold.co/250x200" />
-                <Card title="Testing Title" description="description testing" imageUrl="https://placehold.co/250x200" />
-                <Card title="Testing Title" description="description testing" imageUrl="https://placehold.co/250x200" />
+                <Bedge color="red" text="based bedge" />
             </div>
         </div>
     );
