@@ -1,11 +1,7 @@
-import { useState } from "react";
 import "./App.css";
-import Input from "./components/Input/Input";
 import LoadingSpinner from "./components/spinner/LoadingSpinner";
 
 function App() {
-    const [name, setName] = useState("");
-
     return (
         <div className="hero">
             <br />
