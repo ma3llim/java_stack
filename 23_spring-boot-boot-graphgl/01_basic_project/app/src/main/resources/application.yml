@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: basic_project_graphql
+  datasource:
+    url: jdbc:mysql://localhost:3306/basic_graphql
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
