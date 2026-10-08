@@ -42,6 +42,6 @@ public class BinarySearch {
         int[] nums2 = { -1, 0, 3, 5, 9, 12 };
 
         System.out.println(searchBetter(nums1, 9));
-        System.out.println(searchBetter(nums1, 2));
+        System.out.println(searchBetter(nums2, 2));
     }
 }
