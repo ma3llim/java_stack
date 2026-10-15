@@ -1,6 +1,22 @@
 package problems;
 
+import java.util.Arrays;
+
 public class ValidAnagram {
+    public static boolean isAnagramBruteForce(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        char[] sChar = s.toCharArray();
+        char[] tChar = t.toCharArray();
+
+        Arrays.sort(sChar);
+        Arrays.sort(tChar);
+
+        return Arrays.equals(sChar, tChar);
+    }
+
     public static boolean isAnagram(String s, String t) {
         if (s.length() != t.length()) {
             return false;
@@ -25,7 +41,7 @@ public class ValidAnagram {
     }
 
     public static void main(String[] args) {
-        System.out.println(isAnagram("anagram", "nagaram"));
-        System.out.println(isAnagram("rat", "car"));
+        System.out.println(isAnagramBruteForce("anagram", "nagaram"));
+        System.out.println(isAnagramBruteForce("rat", "car"));
     }
 }
