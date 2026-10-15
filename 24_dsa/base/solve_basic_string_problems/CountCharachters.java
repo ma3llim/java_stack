@@ -5,7 +5,7 @@ public class CountCharachters {
         String name = "Mohd Sameer";
         int length = 0;
 
-        for (char i : name.toCharArray()) {
+        for (int i = 0; i < name.toCharArray().length; i++) {
             length++;
         }
         System.out.println(length);

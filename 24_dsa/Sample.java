@@ -1,15 +1,14 @@
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Sample {
     public static void main(String[] args) {
-        List<String> users = new ArrayList<>(List.of("Sameer", "John", "Alex", "Max", "Shareef", "Fahad"));
-        Iterator<String> iterator = users.iterator();
+        List<List<String>> data = List.of(
+                List.of("a", "b"),
+                List.of("c"),
+                List.of("d", "e", "f"));
 
-        while (iterator.hasNext()) {
-            String userName = iterator.next();
-            System.out.println(userName);
-        }
+        System.out.println(data.stream().map(t -> t.stream().toList()).toList().toString());
+        System.out.println("------------------");
+        System.out.println(data.stream().flatMap(List::stream).toList().toString());
     }
 }
