@@ -1,11 +1,18 @@
-server:
-  port: 8081
-
 spring:
   application:
     name: auth-service
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+  config:
+    import:
+      - configserver:http://localhost:8888
+      - vault://
+
+  cloud:
+    vault:
+      uri: http://localhost:8200
+      authentication: TOKEN
+      token: root
+      kv:
+        enabled: true
+        backend: secret
+        application-name: auth-service
