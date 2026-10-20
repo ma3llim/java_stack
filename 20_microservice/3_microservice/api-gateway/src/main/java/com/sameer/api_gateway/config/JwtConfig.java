@@ -23,7 +23,7 @@ public class JwtConfig {
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
 
         return NimbusJwtDecoder.withSecretKey(secretKey)
-                .macAlgorithm(MacAlgorithm.HS512)
+                .macAlgorithm(MacAlgorithm.HS256)
                 .build();
     }
 }

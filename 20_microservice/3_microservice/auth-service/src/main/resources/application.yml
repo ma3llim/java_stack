@@ -15,4 +15,5 @@ spring:
       kv:
         enabled: true
         backend: secret
-        application-name: auth-service
+        #        default-context: microservices
+        application-name: microservices
