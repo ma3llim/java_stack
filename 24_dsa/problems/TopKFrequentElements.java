@@ -30,6 +30,7 @@ public class TopKFrequentElements {
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
 
+        @SuppressWarnings("unchecked")
         List<Integer>[] buckets = new List[nums.length + 1];
 
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
