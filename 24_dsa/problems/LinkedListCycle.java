@@ -54,12 +54,15 @@ public class LinkedListCycle {
         head.next.next = new ListNode(0);
         head.next.next.next = new ListNode(-4);
 
+        // this line of code is for the creating cycle
         head.next.next.next = head.next;
 
         System.out.println(hasCycle(head));
 
         ListNode head2 = new ListNode(1);
         head2.next = new ListNode(2);
+
+        // this line of code is for the creating cycle
         head2.next = head.next;
 
         System.out.println(hasCycle(head2));
