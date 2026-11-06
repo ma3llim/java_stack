@@ -1,3 +1,5 @@
+package base.solve_basic_array_exercises;
+
 public class SortedArray {
     public static void main(String[] args) {
         int[] arr = { 10, 22, 32, 45, 50, 63 };

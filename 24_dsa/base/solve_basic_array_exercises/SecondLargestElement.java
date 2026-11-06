@@ -1,3 +1,5 @@
+package base.solve_basic_array_exercises;
+
 public class SecondLargestElement {
     public static void main(String args[]) {
         int[] arrs = { 10, 50, 40, 45 };

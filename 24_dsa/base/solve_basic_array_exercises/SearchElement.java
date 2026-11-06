@@ -1,3 +1,5 @@
+package base.solve_basic_array_exercises;
+
 public class SearchElement {
     public static void main(String args[]) {
         int[] arrs = { 10, 20, 30, 40, 50 };

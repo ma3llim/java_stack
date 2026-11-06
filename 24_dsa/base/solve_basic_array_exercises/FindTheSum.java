@@ -1,3 +1,5 @@
+package base.solve_basic_array_exercises;
+
 class FindTheSum {
     public static void main(String args[]) {
         int sum = 0;

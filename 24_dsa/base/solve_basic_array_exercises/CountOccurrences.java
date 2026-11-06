@@ -1,3 +1,5 @@
+package base.solve_basic_array_exercises;
+
 public class CountOccurrences {
     public static void main(String argsp[]) {
         int[] arr = { 10, 20, 10, 30, 10, 40 };

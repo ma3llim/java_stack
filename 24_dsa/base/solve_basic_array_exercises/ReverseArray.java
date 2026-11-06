@@ -1,3 +1,5 @@
+package base.solve_basic_array_exercises;
+
 import java.util.Arrays;
 
 public class ReverseArray {
