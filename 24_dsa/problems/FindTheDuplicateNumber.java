@@ -15,7 +15,7 @@ public class FindTheDuplicateNumber {
         return -1;
     }
 
-    public static int findDuplicate(int[] nums) {
+    public static int findDuplicateBetter(int[] nums) {
         Set<Integer> set = new HashSet<>();
 
         for (int num : nums) {
@@ -26,6 +26,24 @@ public class FindTheDuplicateNumber {
             set.add(num);
         }
         return -1;
+    }
+
+    public static int findDuplicate(int[] nums) {
+        int slow = nums[0];
+        int fast = nums[0];
+
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow;
     }
 
     public static void main(String[] args) {
