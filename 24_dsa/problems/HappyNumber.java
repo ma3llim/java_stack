@@ -16,7 +16,7 @@ public class HappyNumber {
         return sum;
     }
 
-    public static boolean isHappy(int n) {
+    public static boolean isHappyBruteForce(int n) {
         Set<Integer> seen = new HashSet<>();
 
         while (n != 1) {
@@ -28,6 +28,23 @@ public class HappyNumber {
             n = getSumOfSquare(n);
         }
         return true;
+    }
+
+    public static boolean isHappy(int n) {
+        int slow = n;
+        int fast = n;
+
+        do {
+            slow = getSumOfSquare(slow);
+            fast = getSumOfSquare(fast);
+            fast = getSumOfSquare(fast);
+
+            if (slow == 1) {
+                return true;
+            }
+        } while (slow != fast);
+
+        return false;
     }
 
     public static void main(String[] args) {
