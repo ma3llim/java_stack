@@ -11,6 +11,22 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Install Dependencies') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                        echo "Current directory:"
+                        pwd
+
+                        echo "Files in frontend:"
+                        ls -la
+
+                        echo "Checking package files:"
+                        ls -l package.json package-lock.json
+                    '''
+                }
+            }
+        }
 
         stage('Install Dependencies') {
             steps {
