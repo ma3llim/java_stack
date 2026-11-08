@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS-20'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                sh 'npm run lint'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Frontend build completed successfully'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Frontend CI pipeline completed successfully'
+        }
+        failure {
+            echo 'Frontend CI pipeline failed'
+        }
+    }
+}
