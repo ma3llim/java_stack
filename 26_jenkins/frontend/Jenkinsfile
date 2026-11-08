@@ -12,25 +12,9 @@ pipeline {
             }
         }
         
-        stage('Debug Workspace') {
-            steps {
-                sh '''
-                    echo "=== WORKSPACE ROOT ==="
-                    pwd
-                    ls -la
-
-                    echo "=== PROJECT FILE LOCATIONS ==="
-                    find . -maxdepth 5 \\( -name "package.json" -o -name "package-lock.json" -o -name "Jenkinsfile" \\) -print
-
-                    echo "=== GIT STATUS ==="
-                    git status
-                '''
-            }
-        }
-        
         stage('Install Dependencies') {
             steps {
-                dir('frontend') {
+                dir('26_jenkins/frontend') {
                     sh '''
                         echo "Current directory:"
                         pwd
@@ -53,9 +37,17 @@ pipeline {
         //     }
         // }
 
+        stage('Install Dependencies') {
+            steps {
+                dir('26_jenkins/frontend') {
+                    sh 'npm ci'
+                }
+            }
+        }
+
         stage('Lint') {
             steps {
-                dir('frontend') {
+                dir('26_jenkins/frontend') {
                     sh 'npm run lint'
                 }
             }
@@ -63,7 +55,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('frontend') {
+                dir('26_jenkins/frontend') {
                     sh 'npm run build'
                 }
             }
