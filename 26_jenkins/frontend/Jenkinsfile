@@ -15,31 +15,6 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('26_jenkins/frontend') {
-                    sh '''
-                        echo "Current directory:"
-                        pwd
-
-                        echo "Files in frontend:"
-                        ls -la
-
-                        echo "Checking package files:"
-                        ls -l package.json package-lock.json
-                    '''
-                }
-            }
-        }
-
-        // stage('Install Dependencies') {
-        //     steps {
-        //         dir('frontend') {
-        //             sh 'npm ci'
-        //         }
-        //     }
-        // }
-
-        stage('Install Dependencies') {
-            steps {
-                dir('26_jenkins/frontend') {
                     sh 'npm ci'
                 }
             }
