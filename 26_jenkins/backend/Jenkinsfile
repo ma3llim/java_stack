@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'JDK-21'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Java') {
+            steps {
+                sh 'java -version'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('26_jenkins/backend') {
+                    sh 'chmod +x gradlew'
+                    sh './gradlew :app:build'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('26_jenkins/backend') {
+                    sh './gradlew :app:test'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Backend build completed successfully'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Backend CI pipeline completed successfully'
+        }
+        failure {
+            echo 'Backend CI pipeline failed'
+        }
+    }
+}
