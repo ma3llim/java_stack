@@ -14,7 +14,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                dir('java/26_jenkins/frontend') {
+                dir('frontend') {
                     sh 'npm ci'
                 }
             }
@@ -22,7 +22,7 @@ pipeline {
 
         stage('Lint') {
             steps {
-                dir('java/26_jenkins/frontend') {
+                dir('frontend') {
                     sh 'npm run lint'
                 }
             }
@@ -30,7 +30,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('java/26_jenkins/frontend') {
+                dir('frontend') {
                     sh 'npm run build'
                 }
             }
