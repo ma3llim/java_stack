@@ -11,7 +11,23 @@ pipeline {
                 checkout scm
             }
         }
+        
+        stage('Debug Workspace') {
+            steps {
+                sh '''
+                    echo "=== WORKSPACE ROOT ==="
+                    pwd
+                    ls -la
 
+                    echo "=== PROJECT FILE LOCATIONS ==="
+                    find . -maxdepth 5 \\( -name "package.json" -o -name "package-lock.json" -o -name "Jenkinsfile" \\) -print
+
+                    echo "=== GIT STATUS ==="
+                    git status
+                '''
+            }
+        }
+        
         stage('Install Dependencies') {
             steps {
                 dir('frontend') {
