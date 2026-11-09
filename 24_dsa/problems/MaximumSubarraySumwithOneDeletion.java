@@ -1,7 +1,7 @@
 package problems;
 
 public class MaximumSubarraySumwithOneDeletion {
-    public static int maximumSum(int[] arr) {
+    public static int maximumSumBruteForce(int[] arr) {
         int max = Integer.MIN_VALUE;
 
         for (int i = 0; i < arr.length; i++) {
@@ -21,6 +21,21 @@ public class MaximumSubarraySumwithOneDeletion {
         }
 
         return max;
+    }
+
+    public static int maximumSum(int[] arr) {
+        int result = arr[0];
+        int noDelete = arr[0];
+        int oneDelete = 0;
+
+        for (int i = 1; i < arr.length; i++) {
+            int prevNoDelete = noDelete;
+            noDelete = Math.max(arr[i], noDelete + arr[i]);
+            oneDelete = Math.max(prevNoDelete, oneDelete + arr[i]);
+
+            result = Math.max(result, Math.max(noDelete, oneDelete));
+        }
+        return result;
     }
 
     public static void main(String[] args) {
