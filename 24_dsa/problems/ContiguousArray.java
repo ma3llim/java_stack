@@ -1,7 +1,10 @@
 package problems;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ContiguousArray {
-    public static int findMaxLength(int[] nums) {
+    public static int findMaxLengthBruteForce(int[] nums) {
         int maxLength = 0;
         for (int i = 0; i < nums.length; i++) {
             int zeros = 0;
@@ -21,6 +24,31 @@ public class ContiguousArray {
             }
         }
 
+        return maxLength;
+    }
+
+    public static int findMaxLength(int[] nums) {
+        int sum = 0;
+        int maxLength = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                sum--;
+            } else {
+                sum++;
+            }
+
+            if (sum == 0) {
+                maxLength = i + 1;
+            }
+
+            if (map.containsKey(sum)) {
+                maxLength = Math.max(maxLength, i - map.get(sum));
+            } else {
+                map.put(sum, i);
+            }
+        }
         return maxLength;
     }
 
