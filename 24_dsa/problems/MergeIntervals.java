@@ -32,7 +32,7 @@ public class MergeIntervals {
         int index = 0;
 
         for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i][0] <= intervals[i][1]) {
+            if (intervals[i][0] <= intervals[index][1]) {
                 intervals[index][1] = Math.max(intervals[index][1], intervals[i][1]);
             } else {
                 index++;
