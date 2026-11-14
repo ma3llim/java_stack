@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsertInterval {
-    public static int[][] insert(int[][] intervals, int[] newInterval) {
+    public static int[][] insertBruteForce(int[][] intervals, int[] newInterval) {
         List<int[]> list = new ArrayList<>();
 
         for (int[] interval : intervals) {
@@ -26,6 +26,39 @@ public class InsertInterval {
         }
 
         return result.toArray(new int[result.size()][]);
+    }
+
+    public static int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> list = new ArrayList<>();
+        boolean inserted = false;
+
+        for (int[] interval : intervals) {
+            if (!inserted && interval[0] >= newInterval[0]) {
+                list.add(newInterval);
+                inserted = true;
+            }
+
+            list.add(interval);
+        }
+
+        if (!inserted) {
+            list.add(newInterval);
+        }
+
+        int index = 0;
+        for (int i = 1; i < list.size(); i++) {
+            int[] current = list.get(i);
+            int[] previous = list.get(index);
+
+            if (current[0] <= previous[1]) {
+                previous[1] = Math.max(current[1], previous[1]);
+            } else {
+                index++;
+                list.set(index, current);
+            }
+        }
+
+        return list.subList(0, index + 1).toArray(new int[0][]);
     }
 
     public static void main(String[] args) {
