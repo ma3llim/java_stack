@@ -1,7 +1,9 @@
 package problems;
 
+import java.util.Stack;
+
 public class RemoveAllAdjacentDuplicatesInString {
-    public static String removeDuplicates(String s) {
+    public static String removeDuplicatesBruteForce(String s) {
         StringBuilder sb = new StringBuilder(s);
         boolean removed = true;
 
@@ -18,6 +20,25 @@ public class RemoveAllAdjacentDuplicatesInString {
         }
 
         return sb.toString();
+    }
+
+    public static String removeDuplicates(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        for (Character character : s.toCharArray()) {
+            if (!stack.empty() && stack.peek() == character) {
+                stack.pop();
+            } else {
+                stack.add(character);
+            }
+        }
+        StringBuilder result = new StringBuilder();
+
+        for (Character character : stack) {
+            result.append(character);
+        }
+
+        return result.toString();
     }
 
     public static void main(String[] args) {
