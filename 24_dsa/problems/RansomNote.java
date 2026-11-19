@@ -1,7 +1,10 @@
 package problems;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RansomNote {
-    public static boolean canConstruct(String ransomNote, String magazine) {
+    public static boolean canConstructBruteForce(String ransomNote, String magazine) {
         boolean[] used = new boolean[magazine.length()];
 
         for (int i = 0; i < ransomNote.length(); i++) {
@@ -16,6 +19,27 @@ public class RansomNote {
             }
 
             if (!found) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean canConstruct(String ransomNote, String magazine) {
+        Map<Character, Integer> have = new HashMap<>();
+        Map<Character, Integer> needed = new HashMap<>();
+
+        for (char ch : ransomNote.toCharArray()) {
+            have.put(ch, have.getOrDefault(ch, 0) + 1);
+        }
+
+        for (char ch : magazine.toCharArray()) {
+            needed.put(ch, needed.getOrDefault(ch, 0) + 1);
+        }
+
+        for (char ch : ransomNote.toCharArray()) {
+            if (needed.getOrDefault(ch, 0) < have.get(ch)) {
                 return false;
             }
         }
