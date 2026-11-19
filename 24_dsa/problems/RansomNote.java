@@ -26,7 +26,7 @@ public class RansomNote {
         return true;
     }
 
-    public static boolean canConstruct(String ransomNote, String magazine) {
+    public static boolean canConstructBetter(String ransomNote, String magazine) {
         Map<Character, Integer> have = new HashMap<>();
         Map<Character, Integer> needed = new HashMap<>();
 
@@ -42,6 +42,24 @@ public class RansomNote {
             if (needed.getOrDefault(ch, 0) < have.get(ch)) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    public static boolean canConstruct(String ransomNote, String magazine) {
+        int[] frequency = new int[26];
+
+        for (char ch : magazine.toCharArray()) {
+            frequency[ch - 'a']++;
+        }
+
+        for (char ch : ransomNote.toCharArray()) {
+            if (frequency[ch - 'a'] == 0) {
+                return false;
+            }
+
+            frequency[ch - 'a']--;
         }
 
         return true;
