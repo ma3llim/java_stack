@@ -21,7 +21,7 @@ public class FirstUniqueCharacterinaString {
         return -1;
     }
 
-    public static int firstUniqChar(String s) {
+    public static int firstUniqCharBetter(String s) {
         Map<Character, Integer> hashMap = new HashMap<>();
 
         for (char ch : s.toCharArray()) {
@@ -30,6 +30,22 @@ public class FirstUniqueCharacterinaString {
 
         for (int i = 0; i < s.length(); i++) {
             if (hashMap.get(s.charAt(i)) == 1) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public static int firstUniqChar(String s) {
+        int[] frequency = new int[26];
+
+        for (char ch : s.toCharArray()) {
+            frequency[ch - 'a']++;
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            if (frequency[s.charAt(i) - 'a'] == 1) {
                 return i;
             }
         }
