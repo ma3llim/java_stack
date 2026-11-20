@@ -2,19 +2,7 @@ package problems;
 
 import java.util.HashSet;
 import java.util.Set;
-
-/**
- * ListNode
- */
-class ListNode {
-    int value;
-    ListNode next;
-
-    ListNode(int value) {
-        this.value = value;
-        this.next = null;
-    }
-}
+import blocks.ListNode;
 
 public class LinkedListCycle {
     public static boolean hasCycleBruteForce(ListNode head) {

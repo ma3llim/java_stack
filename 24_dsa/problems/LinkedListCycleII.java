@@ -2,16 +2,7 @@ package problems;
 
 import java.util.HashSet;
 import java.util.Set;
-
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode(int x) {
-        val = x;
-        next = null;
-    }
-}
+import blocks.ListNode;
 
 public class LinkedListCycleII {
     public static ListNode detectCycleBruteForce(ListNode head) {
@@ -54,20 +45,29 @@ public class LinkedListCycleII {
     }
 
     public static void main(String[] args) {
+        // Test Case 1: Cycle starts at node 2
         ListNode head = new ListNode(3);
         head.next = new ListNode(2);
         head.next.next = new ListNode(0);
         head.next.next.next = new ListNode(-4);
 
-        head.next.next.next = head.next;
-        System.out.println(detectCycle(head));
+        head.next.next.next.next = head.next;
 
+        ListNode result1 = detectCycle(head);
+        System.out.println(result1 != null ? result1.val : null);
+
+        // Test Case 2: Cycle starts at node 1
         ListNode head2 = new ListNode(1);
         head2.next = new ListNode(2);
-        head.next = head;
-        System.out.println(detectCycle(head2));
+        head2.next.next = head2;
 
+        ListNode result2 = detectCycle(head2);
+        System.out.println(result2 != null ? result2.val : null);
+
+        // Test Case 3: No cycle
         ListNode head3 = new ListNode(1);
-        System.out.println(detectCycle(head3));
+
+        ListNode result3 = detectCycle(head3);
+        System.out.println(result3 != null ? result3.val : null);
     }
 }
