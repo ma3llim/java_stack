@@ -1,7 +1,7 @@
 package problems;
 
 public class FindMinimuminRotatedSortedArray {
-    public static int findMin(int[] nums) {
+    public static int findMinBruteForce(int[] nums) {
         int min = Integer.MAX_VALUE;
 
         for (int i = 0; i < nums.length; i++) {
@@ -9,6 +9,25 @@ public class FindMinimuminRotatedSortedArray {
         }
 
         return min;
+    }
+
+    public static int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length;
+        int res = -1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] > nums[nums.length - 1]) {
+                left = mid + 1;
+            } else {
+                res = mid;
+                right = mid - 1;
+            }
+        }
+
+        return nums[res];
     }
 
     public static void main(String[] args) {
