@@ -2,7 +2,9 @@ package problems;
 
 public class SearchInsertPosition {
     public static int searchInsert(int[] nums, int target) {
-        int left = 0, right = nums.length - 1;
+        int left = 0;
+        int right = nums.length - 1;
+
         while (left <= right) {
             int middle = left + (right - left) / 2;
 
@@ -14,6 +16,7 @@ public class SearchInsertPosition {
                 right = middle - 1;
             }
         }
+
         return left;
     }
 
