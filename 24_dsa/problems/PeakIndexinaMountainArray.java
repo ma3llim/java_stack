@@ -2,15 +2,12 @@ package problems;
 
 public class PeakIndexinaMountainArray {
     public static int peakIndexInMountainArray(int[] arr) {
-        int answer = 0;
-
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] > arr[answer]) {
-                answer = i;
+        for (int i = 1; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i - 1] && arr[i] > arr[i + 1]) {
+                return i;
             }
         }
-
-        return answer;
+        return -1;
     }
 
     public static void main(String[] args) {
@@ -18,6 +15,6 @@ public class PeakIndexinaMountainArray {
         System.out.println(peakIndexInMountainArray(new int[] { 0, 2, 1, 0 }));
         System.out.println(peakIndexInMountainArray(new int[] { 0, 10, 5, 2 }));
         System.out.println(peakIndexInMountainArray(new int[] { 0, 10, 50, 2 }));
-        System.out.println(peakIndexInMountainArray(new int[] { 0, 10, 50, 2, 70 }));
+        System.out.println(peakIndexInMountainArray(new int[] { 0, 10, 50, 70, 2 }));
     }
 }
