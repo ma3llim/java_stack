@@ -41,7 +41,7 @@ public class FindFirstandLastPositionofElementinSortedArray {
             } else if (target > nums[middle]) {
                 left = middle + 1;
             } else if (target < nums[middle]) {
-                right = right - 1;
+                right = middle - 1;
             }
         }
 
@@ -62,7 +62,7 @@ public class FindFirstandLastPositionofElementinSortedArray {
             } else if (target > nums[middle]) {
                 left = middle + 1;
             } else if (target < nums[middle]) {
-                right = right - 1;
+                right = middle - 1;
             }
         }
 
