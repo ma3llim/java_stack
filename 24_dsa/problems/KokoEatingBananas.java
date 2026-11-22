@@ -1,8 +1,8 @@
 package problems;
 
 public class KokoEatingBananas {
-    public int calculateHours(int[] piles, int k) {
-        int hours = 0;
+    public long calculateHours(int[] piles, int k) {
+        long hours = 0;
 
         for (int pile : piles) {
             hours += (pile + k - 1) / k;
@@ -19,7 +19,7 @@ public class KokoEatingBananas {
         }
 
         for (int i = 1; i <= max; i++) {
-            int hours = calculateHours(piles, i);
+            long hours = calculateHours(piles, i);
 
             if (hours <= h) {
                 return i;
@@ -42,7 +42,7 @@ public class KokoEatingBananas {
         while (left <= right) {
             int mid = left + (right - left) / 2;
 
-            int hours = calculateHours(piles, mid);
+            long hours = calculateHours(piles, mid);
 
             if (hours > h) {
                 left = mid + 1;
