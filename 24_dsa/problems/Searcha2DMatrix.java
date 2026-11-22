@@ -2,6 +2,10 @@ package problems;
 
 public class Searcha2DMatrix {
     public static boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null) {
+            return false;
+        }
+
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == target) {
