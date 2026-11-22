@@ -5,11 +5,7 @@ public class KokoEatingBananas {
         int hours = 0;
 
         for (int pile : piles) {
-            hours += pile / k;
-
-            if (pile % k != 0) {
-                hours++;
-            }
+            hours += (pile + k - 1) / k;
         }
 
         return hours;
