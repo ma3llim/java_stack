@@ -1,12 +1,15 @@
 package problems;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class TopKFrequentWords {
-    public static List<String> topKFrequent(String[] words, int k) {
+    public static List<String> topKFrequentBruteForce(String[] words, int k) {
         Map<String, Integer> map = new HashMap<>();
 
         for (String word : words) {
@@ -24,6 +27,39 @@ public class TopKFrequentWords {
         });
 
         return list.subList(0, k);
+    }
+
+    public static List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> map = new HashMap<>();
+
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
+        }
+
+        PriorityQueue<String> pq = new PriorityQueue<>((a, b) -> {
+            if (!map.get(a).equals(map.get(b))) {
+                return map.get(a) - map.get(b);
+            }
+            return b.compareTo(a);
+        });
+
+        for (String word : map.keySet()) {
+            pq.add(word);
+
+            if (pq.size() > k) {
+                pq.poll();
+            }
+        }
+
+        List<String> result = new ArrayList<>();
+
+        while (!pq.isEmpty()) {
+            result.add(pq.poll());
+        }
+
+        Collections.reverse(result);
+
+        return result;
     }
 
     public static void main(String[] args) {
