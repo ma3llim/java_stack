@@ -3,11 +3,12 @@ package problems;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import blocks.ListNode;
 
 public class MergekSortedLists {
-    public static ListNode mergeKLists(ListNode[] lists) {
+    public static ListNode mergeKListsBruteForce(ListNode[] lists) {
         if (lists == null || lists.length == 0) {
             return null;
         }
@@ -30,6 +31,32 @@ public class MergekSortedLists {
         for (int val : intList) {
             curr.next = new ListNode(val);
             curr = curr.next;
+        }
+
+        return dummy.next;
+    }
+
+    public static ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<ListNode> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.val, b.val));
+
+        for (ListNode node : lists) {
+            if (node != null) {
+                pq.add(node);
+            }
+        }
+
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+
+        while (!pq.isEmpty()) {
+            ListNode smallest = pq.poll();
+
+            curr.next = smallest;
+            curr = curr.next;
+
+            if (smallest.next != null) {
+                pq.add(smallest.next);
+            }
         }
 
         return dummy.next;
