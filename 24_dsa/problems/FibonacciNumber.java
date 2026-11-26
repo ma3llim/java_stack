@@ -12,7 +12,7 @@ public class FibonacciNumber {
         return fib(n - 1) + fib(n - 2);
     }
 
-    public static int fib(int n) {
+    public static int fibBetter(int n) {
         if (n <= 1) {
             return n;
         }
@@ -26,6 +26,24 @@ public class FibonacciNumber {
         }
 
         return arr[n];
+    }
+
+    public static int fib(int n) {
+        if (n <= 1) {
+            return n;
+        }
+
+        int i = 0;
+        int j = 1;
+
+        for (int k = 2; k <= n; k++) {
+            int curr = i + j;
+
+            i = j;
+            j = curr;
+        }
+
+        return j;
     }
 
     public static void main(String[] args) {
